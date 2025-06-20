@@ -73,6 +73,26 @@ namespace UnicomTICManagementSystem.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap LOCK {
+            get {
+                object obj = ResourceManager.GetObject("LOCK", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Login_Unicom {
+            get {
+                object obj = ResourceManager.GetObject("Login Unicom", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap UNICOM_TIC_LOGO {
             get {
                 object obj = ResourceManager.GetObject("UNICOM-TIC_LOGO", resourceCulture);

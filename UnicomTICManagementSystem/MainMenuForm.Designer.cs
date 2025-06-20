@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.mainpanel = new System.Windows.Forms.Panel();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button12 = new System.Windows.Forms.Button();
             this.button13 = new System.Windows.Forms.Button();
@@ -37,10 +38,10 @@
             this.button16 = new System.Windows.Forms.Button();
             this.button17 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.mainpanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // mainpanel
@@ -50,6 +51,16 @@
             this.mainpanel.Name = "mainpanel";
             this.mainpanel.Size = new System.Drawing.Size(770, 450);
             this.mainpanel.TabIndex = 0;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = global::UnicomTICManagementSystem.Properties.Resources.Entry;
+            this.pictureBox2.Location = new System.Drawing.Point(3, 3);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(767, 447);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 19;
+            this.pictureBox2.TabStop = false;
             // 
             // label1
             // 
@@ -73,7 +84,7 @@
             // 
             // button13
             // 
-            this.button13.Location = new System.Drawing.Point(3, 150);
+            this.button13.Location = new System.Drawing.Point(3, 190);
             this.button13.Name = "button13";
             this.button13.Size = new System.Drawing.Size(185, 23);
             this.button13.TabIndex = 14;
@@ -83,7 +94,7 @@
             // 
             // button14
             // 
-            this.button14.Location = new System.Drawing.Point(3, 191);
+            this.button14.Location = new System.Drawing.Point(3, 151);
             this.button14.Name = "button14";
             this.button14.Size = new System.Drawing.Size(185, 23);
             this.button14.TabIndex = 15;
@@ -113,12 +124,13 @@
             // 
             // button17
             // 
-            this.button17.Location = new System.Drawing.Point(3, 310);
+            this.button17.Location = new System.Drawing.Point(3, 352);
             this.button17.Name = "button17";
             this.button17.Size = new System.Drawing.Size(185, 23);
             this.button17.TabIndex = 18;
             this.button17.Text = "Logout";
             this.button17.UseVisualStyleBackColor = true;
+            this.button17.Click += new System.EventHandler(this.button17_Click);
             // 
             // pictureBox1
             // 
@@ -130,15 +142,15 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // pictureBox2
+            // button1
             // 
-            this.pictureBox2.Image = global::UnicomTICManagementSystem.Properties.Resources.Entry;
-            this.pictureBox2.Location = new System.Drawing.Point(3, 3);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(767, 447);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 19;
-            this.pictureBox2.TabStop = false;
+            this.button1.Location = new System.Drawing.Point(3, 314);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(185, 23);
+            this.button1.TabIndex = 19;
+            this.button1.Text = "Attendence Management";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // MainMenuForm
             // 
@@ -146,6 +158,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSteelBlue;
             this.ClientSize = new System.Drawing.Size(974, 561);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.button17);
             this.Controls.Add(this.button16);
@@ -159,8 +172,8 @@
             this.Text = "MainMenuForm";
             this.Load += new System.EventHandler(this.MainMenuForm_Load);
             this.mainpanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -178,5 +191,6 @@
         private System.Windows.Forms.Button button17;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button button1;
     }
 }

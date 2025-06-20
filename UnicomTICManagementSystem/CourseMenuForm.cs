@@ -51,5 +51,11 @@ namespace UnicomTICManagementSystem
         {
             loadform(new SubjectForm());
         }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+          
+            this.Hide();
+        }
     }
 }

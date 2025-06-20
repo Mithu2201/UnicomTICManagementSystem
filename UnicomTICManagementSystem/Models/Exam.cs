@@ -10,9 +10,11 @@ namespace UnicomTICManagementSystem.Models
 {
     internal class Exam
     {
-        public int ExamID { get; set; }
-        public string ExamName { get; set; }
-        public int SubjectID { get; set; }
-        
+        public int ExID { get; set; }
+        public string Exname { get; set; }
+        public string Exmode { get; set; }
+        public string Subname { get; set; }
+        public int SubID { get; set; }
+
     }
 }

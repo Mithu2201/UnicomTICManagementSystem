@@ -12,9 +12,13 @@ namespace UnicomTICManagementSystem
 {
     public partial class StudentMenuForm : Form
     {
-        public StudentMenuForm()
+        private readonly int loggedInUserId;
+        private readonly string userRole;
+        public StudentMenuForm(int userId, string role)
         {
             InitializeComponent();
+            loggedInUserId = userId;
+            userRole = role;
         }
 
         public void loadform(object Form)
@@ -34,12 +38,33 @@ namespace UnicomTICManagementSystem
         }
         private void StudentMenuForm_Load(object sender, EventArgs e)
         {
-            loadform(new RegistrationForm());
+            loadform(new StudentTimetableForm(loggedInUserId, userRole));
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
-            loadform(new RegistrationForm());
+            
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+            loadform(new StudentTimetableForm(loggedInUserId, userRole));
+        }
+
+        private void label6_Click_1(object sender, EventArgs e)
+        {
+            loadform(new StudentMarks(loggedInUserId, userRole));
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+            
+            this.Hide();
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+            loadform(new StudentAttendence());
         }
     }
 }

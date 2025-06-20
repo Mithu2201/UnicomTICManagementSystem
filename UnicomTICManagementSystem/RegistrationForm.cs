@@ -18,7 +18,7 @@ namespace UnicomTICManagementSystem
 {
     public partial class RegistrationForm : Form
     {
-        private int selectedStudentId = -1;
+        
         public RegistrationForm()
         {
             InitializeComponent();
@@ -27,6 +27,7 @@ namespace UnicomTICManagementSystem
 
         private void StdForm_Load(object sender, EventArgs e)
         {
+            LoadRolesIntoComboBox();
         }
 
 
@@ -37,7 +38,7 @@ namespace UnicomTICManagementSystem
             StdAddress.Clear();
             StdUserName.Clear();
             StdUserPass.Clear();
-            StdUserRole.Clear();
+            RegcomboBox.SelectedIndex = -1;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -47,20 +48,35 @@ namespace UnicomTICManagementSystem
 
         private void Sadd_Click_1(object sender, EventArgs e)
         {
+            if (!ValidateRoleNumber())
+            {
+                return; // Stop the registration if validation fails
+            }
+
+            if (StdPhone.Text.Length != 10 || !StdPhone.Text.All(char.IsDigit))
+            {
+                MessageBox.Show("Phone number must be exactly 10 digits and numeric.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             // First, insert the user and get userId
             User user = new User
             {
                 UserName = StdUserName.Text,
                 PassAdd = StdUserPass.Text,
-                Role = StdUserRole.Text
+                Role = RegcomboBox.Text
             };
 
             UserController userController = new UserController();
             int userId = userController.InsertUser(user.UserName, user.PassAdd, user.Role);
 
+            if (userId == -1)
+            {
+                return; // Prevent further execution
+            }
+
             // Now check the role and insert accordingly
-            if (StdUserRole.Text == "Student")
+            if (RegcomboBox.Text == "Student")
             {
                 Student student = new Student
                 {
@@ -74,8 +90,10 @@ namespace UnicomTICManagementSystem
                 studentController.InsertStudent(student.Std_Name, student.Std_Phone, student.Std_Address, student.User_ID);
 
                 MessageBox.Show("Student inserted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                this.Hide();
             }
-            else if (StdUserRole.Text == "Lecture")
+            else if (RegcomboBox.Text == "Lecture")
             {
                 Lectures lecture = new Lectures
                 {
@@ -89,8 +107,10 @@ namespace UnicomTICManagementSystem
                 lectureController.InsertLecture(lecture.Lec_Name, lecture.Lec_Phone, lecture.Lec_Address, lecture.User_ID);
 
                 MessageBox.Show("Lecture inserted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                this.Hide();
             }
-            else if (StdUserRole.Text == "Staff")
+            else if (RegcomboBox.Text == "Staff")
             {
                 Staffs staff = new Staffs
                 {
@@ -104,6 +124,25 @@ namespace UnicomTICManagementSystem
                 staffController.InsertStaff(staff.Stf_Name, staff.Stf_Phone, staff.Stf_Address, staff.User_ID);
 
                 MessageBox.Show("Staff inserted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                this.Hide();
+            }
+            else if (RegcomboBox.Text == "Admin")
+            {
+                Staffs staff = new Staffs
+                {
+                    Stf_Name = Stdname.Text,
+                    Stf_Phone = StdPhone.Text,
+                    Stf_Address = StdAddress.Text,
+                    User_ID = userId
+                };
+
+                StaffControllers staffController = new StaffControllers();
+                staffController.InsertStaff(staff.Stf_Name, staff.Stf_Phone, staff.Stf_Address, staff.User_ID);
+
+                MessageBox.Show("New Admin inserted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                this.Hide();
             }
             else
             {
@@ -113,8 +152,50 @@ namespace UnicomTICManagementSystem
             ClearInputFields();
 
 
-        }
-        
 
+        }
+
+        private void LoadRolesIntoComboBox()
+        {
+            RoleController roleController = new RoleController();
+            List<string> roleNames = roleController.GetAllRoleNames();
+
+            RegcomboBox.DataSource = roleNames;
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            this.Hide();
+        }
+
+        private bool ValidateRoleNumber()
+        {
+            string selectedRoleName = RegcomboBox.Text.Trim();
+            string enteredRoleCode = RegRole.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(selectedRoleName) || string.IsNullOrWhiteSpace(enteredRoleCode))
+            {
+                MessageBox.Show("Please enter both Role Number and select a Role.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            using (var conn = Dbconfig.GetConnection())
+            {
+                string query = "SELECT 1 FROM Roles WHERE RoleName = @RoleName AND RoleCode = @RoleCode LIMIT 1";
+                using (var cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@RoleName", selectedRoleName);
+                    cmd.Parameters.AddWithValue("@RoleCode", enteredRoleCode);
+                    object result = cmd.ExecuteScalar();
+                    if (result == null)
+                    {
+                        MessageBox.Show("Invalid Role Number for the selected Role.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
     }
 }

@@ -80,22 +80,23 @@ namespace UnicomTICManagementSystem.Controllers
             using (var conn = Dbconfig.GetConnection())
             {
                 var cmd = new SQLiteCommand(@"
-                    SELECT s.SubjectId, s.SubjectCode, s.SubjectName, s.CourseId, sec.CouName AS CourseName
-                    FROM Subjects s
-                    LEFT JOIN Courses sec ON s.CourseId = sec.CouId", conn);
+            SELECT s.SubjectId, s.SubjectCode, s.SubjectName, s.CourseId, c.CouName AS CourseName
+            FROM Subjects s
+            LEFT JOIN Courses c ON s.CourseId = c.CouId", conn);
 
                 var reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    Subject Tech = new Subject
+                    Subject subj = new Subject
                     {
                         SubID = reader.GetInt32(0),
                         SubCode = reader.GetString(1),
                         Subname = reader.GetString(2),
-                        CourseID = reader.GetInt32(3)
+                        CourseID = reader.GetInt32(3),
+                        CourseName = reader.IsDBNull(4) ? "" : reader.GetString(4) // ✅ Map CourseName
                     };
-                    Subjects.Add(Tech);
+                    Subjects.Add(subj);
                 }
             }
 

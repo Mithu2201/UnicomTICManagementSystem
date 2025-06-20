@@ -14,11 +14,25 @@ namespace UnicomTICManagementSystem.Controllers
     {
         public int InsertUser(string name, string pass, string role)
         {
-            int insertedUserId;
+            int insertedUserId = -1;
 
-            string insertQuery = "INSERT INTO Users (UserName, UserPass, UserRole) VALUES (@UserName, @UserPass, @UserRole)";
             using (var conn = Dbconfig.GetConnection())
             {
+                // Check if the username already exists
+                string checkQuery = "SELECT COUNT(*) FROM Users WHERE UserName = @UserName";
+                using (var checkCmd = new SQLiteCommand(checkQuery, conn))
+                {
+                    checkCmd.Parameters.AddWithValue("@UserName", name);
+                    int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+                    if (count > 0)
+                    {
+                        MessageBox.Show("Username already exists. Please choose another one.", "Duplicate User", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return -1;
+                    }
+                }
+
+                // If not exists, insert new user
+                string insertQuery = "INSERT INTO Users (UserName, UserPass, UserRole) VALUES (@UserName, @UserPass, @UserRole)";
                 using (var cmd = new SQLiteCommand(insertQuery, conn))
                 {
                     cmd.Parameters.AddWithValue("@UserName", name);

@@ -30,7 +30,7 @@ namespace UnicomTICManagementSystem
         }
         private void label6_Click(object sender, EventArgs e)
         {
-            loadform(new ExamForm());
+            loadform(new AddExamForm());
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -41,17 +41,38 @@ namespace UnicomTICManagementSystem
 
         private void label3_Click(object sender, EventArgs e)
         {
-            loadform(new ClassForm());
+            
         }
 
         private void label2_Click_1(object sender, EventArgs e)
         {
-
+            loadform(new AddClassForm());
         }
 
         private void ExamMenuForm_Load(object sender, EventArgs e)
         {
+            loadform(new AddExamForm());
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
             loadform(new ExamForm());
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+            loadform(new ClassForm());
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+            
+            this.Hide();
         }
     }
 }

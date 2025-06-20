@@ -10,9 +10,13 @@ namespace UnicomTICManagementSystem.Models
 {
     internal class Room
     {
-        public int RoomID { get; set; }
-        public string RoomName { get; set; }
-        public string RoomType { get; set; }
-       
+        public int RoID { get; set; }
+        public string Roname { get; set; }
+        public string Rotype { get; set; }
+        public string StudyMode { get; set; } // "Class" or "Exam"
+        public string SessionName { get; set; } // ExName or ClassName
+        public int? ClID { get; set; }
+        public int? ExID { get; set; }
+
     }
 }

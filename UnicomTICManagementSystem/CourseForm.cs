@@ -109,6 +109,12 @@ namespace UnicomTICManagementSystem
 
         private void Sadd_Click(object sender, EventArgs e)
         {
+
+            if (string.IsNullOrEmpty(Coucode.Text) || string.IsNullOrEmpty(Couname.Text))
+            {
+                MessageBox.Show("Both Course Code and Course Name are required.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             Course user_01 = new Course
             {
                 CourseCode = Coucode.Text,

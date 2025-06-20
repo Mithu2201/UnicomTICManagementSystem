@@ -34,17 +34,28 @@ namespace UnicomTICManagementSystem
 
         private void label6_Click(object sender, EventArgs e)
         {
-            loadform(new TimeTablesForm());
+            loadform(new AddTimeForm());
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
+            loadform(new AddRoomForm());
+        }
+
+        private void label3_Click_1(object sender, EventArgs e)
+        {
             loadform(new RoomForm());
         }
 
-        private void label3_Click(object sender, EventArgs e)
+        private void label7_Click(object sender, EventArgs e)
         {
-            loadform(new ClassForm());
+            loadform(new TimeTablesForm());
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+            
+            this.Hide();
         }
     }
 }

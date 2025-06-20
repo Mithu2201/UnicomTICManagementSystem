@@ -175,55 +175,55 @@ namespace UnicomTICManagementSystem
 
         private void Ssearch_Click(object sender, EventArgs e)
         {
-            /*string searchName = TecName.Text.Trim();
+            string searchName = SubName.Text.Trim();
 
             if (!string.IsNullOrEmpty(searchName))
             {
-                using (var conn = DaConfig.GetConnection())
+                using (var conn = Dbconfig.GetConnection())
                 {
                     string query = @"
-                SELECT t.*, s.Name AS SectionName 
-                FROM Teachers t
-                LEFT JOIN Sections s ON t.SectionId = s.Id
-                WHERE t.Name = @Name
+                SELECT * FROM Subjects 
+                WHERE SubjectName LIKE @Name
                 LIMIT 1";
 
                     using (var cmd = new SQLiteCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@Name", searchName);
+                        cmd.Parameters.AddWithValue("@Name", $"%{searchName}%");
 
                         using (var reader = cmd.ExecuteReader())
                         {
                             if (reader.Read())
                             {
-                                selectTeacherId = Convert.ToInt32(reader["Id"]);
-                                TecName.Text = reader["Name"].ToString();
-                                TecPhone.Text = reader["Phone"].ToString();
-                                TecAddress.Text = reader["Address"].ToString();
+                                selectSubjectId = Convert.ToInt32(reader["SubjectId"]);
+                                SubCode.Text = reader["SubjectCode"].ToString();
+                                SubName.Text = reader["SubjectName"].ToString();
+                                int courseId = Convert.ToInt32(reader["CourseId"]);
 
-                                string sectionName = reader["SectionName"].ToString();
-
-                                // Set the dropdown to match the section name
-                                foreach (var item in TecStream.Items)
-                                {
-                                    if (((dynamic)item).Name == sectionName)
-                                    {
-                                        TecStream.SelectedItem = item;
-                                        break;
-                                    }
-                                }
+                                // Set the dropdown to match the CourseID
+                                SubcomboBox.SelectedValue = courseId;
                             }
                             else
                             {
-                                MessageBox.Show("Teacher not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                TecAddress.Clear();
-                                TecPhone.Clear();
-                                selectTeacherId = -1;
+                                MessageBox.Show("Subject not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                ClearForm();
                             }
                         }
                     }
                 }
-            }*/
+            }
+            else
+            {
+                MessageBox.Show("Please enter a subject name to search.");
+            }
+        
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            SubCode.Clear();
+            SubName.Clear();
+            SubcomboBox.SelectedIndex = -1;
+            selectSubjectId = -1;
         }
     }
 }

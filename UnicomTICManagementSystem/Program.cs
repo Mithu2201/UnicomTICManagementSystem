@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -19,10 +20,12 @@ namespace UnicomTICManagementSystem
         {
 
             Migration.CreateTables();
-
+            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainMenuForm());
+            Application.Run(new Login());
         }
+
+        
     }
 }

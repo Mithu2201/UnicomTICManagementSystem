@@ -57,5 +57,15 @@ namespace UnicomTICManagementSystem
         {
             loadform(new StudentForm());
         }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+            loadform(new RoleForm());
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+        }
     }
 }

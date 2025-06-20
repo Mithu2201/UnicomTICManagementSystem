@@ -45,7 +45,7 @@
             // 
             // Sadd
             // 
-            this.Sadd.Location = new System.Drawing.Point(424, 108);
+            this.Sadd.Location = new System.Drawing.Point(373, 108);
             this.Sadd.Name = "Sadd";
             this.Sadd.Size = new System.Drawing.Size(75, 23);
             this.Sadd.TabIndex = 26;
@@ -55,7 +55,7 @@
             // 
             // Sedit
             // 
-            this.Sedit.Location = new System.Drawing.Point(334, 108);
+            this.Sedit.Location = new System.Drawing.Point(261, 108);
             this.Sedit.Name = "Sedit";
             this.Sedit.Size = new System.Drawing.Size(75, 23);
             this.Sedit.TabIndex = 27;
@@ -65,7 +65,7 @@
             // 
             // Sdelete
             // 
-            this.Sdelete.Location = new System.Drawing.Point(253, 108);
+            this.Sdelete.Location = new System.Drawing.Point(150, 108);
             this.Sdelete.Name = "Sdelete";
             this.Sdelete.Size = new System.Drawing.Size(75, 23);
             this.Sdelete.TabIndex = 28;
@@ -75,7 +75,7 @@
             // 
             // Ssearch
             // 
-            this.Ssearch.Location = new System.Drawing.Point(158, 108);
+            this.Ssearch.Location = new System.Drawing.Point(571, 62);
             this.Ssearch.Name = "Ssearch";
             this.Ssearch.Size = new System.Drawing.Size(75, 23);
             this.Ssearch.TabIndex = 29;
@@ -85,17 +85,18 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(505, 108);
+            this.button1.Location = new System.Drawing.Point(490, 108);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 37;
             this.button1.Text = "Clear";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(162, 71);
+            this.label3.Location = new System.Drawing.Point(147, 71);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(89, 13);
             this.label3.TabIndex = 31;
@@ -104,7 +105,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(162, 5);
+            this.label2.Location = new System.Drawing.Point(147, 5);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(86, 13);
             this.label2.TabIndex = 30;
@@ -112,14 +113,14 @@
             // 
             // SubCode
             // 
-            this.SubCode.Location = new System.Drawing.Point(276, 34);
+            this.SubCode.Location = new System.Drawing.Point(261, 34);
             this.SubCode.Name = "SubCode";
             this.SubCode.Size = new System.Drawing.Size(304, 20);
             this.SubCode.TabIndex = 33;
             // 
             // SubName
             // 
-            this.SubName.Location = new System.Drawing.Point(276, 64);
+            this.SubName.Location = new System.Drawing.Point(261, 64);
             this.SubName.Name = "SubName";
             this.SubName.Size = new System.Drawing.Size(304, 20);
             this.SubName.TabIndex = 34;
@@ -127,7 +128,7 @@
             // SubdataGridView
             // 
             this.SubdataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.SubdataGridView.Location = new System.Drawing.Point(158, 152);
+            this.SubdataGridView.Location = new System.Drawing.Point(143, 152);
             this.SubdataGridView.Name = "SubdataGridView";
             this.SubdataGridView.Size = new System.Drawing.Size(422, 133);
             this.SubdataGridView.TabIndex = 36;
@@ -136,7 +137,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(162, 41);
+            this.label1.Location = new System.Drawing.Point(147, 41);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(88, 13);
             this.label1.TabIndex = 39;
@@ -145,7 +146,7 @@
             // SubcomboBox
             // 
             this.SubcomboBox.FormattingEnabled = true;
-            this.SubcomboBox.Location = new System.Drawing.Point(276, 2);
+            this.SubcomboBox.Location = new System.Drawing.Point(261, 2);
             this.SubcomboBox.Name = "SubcomboBox";
             this.SubcomboBox.Size = new System.Drawing.Size(304, 21);
             this.SubcomboBox.TabIndex = 40;
@@ -154,7 +155,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(650, 350);
             this.Controls.Add(this.SubcomboBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);

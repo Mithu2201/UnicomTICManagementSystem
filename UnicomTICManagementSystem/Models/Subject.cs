@@ -13,7 +13,7 @@ namespace UnicomTICManagementSystem.Models
         public int SubID { get; set; }
         public string SubCode { get; set; }
         public string Subname { get; set; }
-        public int CourseName { get; set; }
+        public string CourseName { get; set; }
         public int CourseID { get; set; }
         
     }
