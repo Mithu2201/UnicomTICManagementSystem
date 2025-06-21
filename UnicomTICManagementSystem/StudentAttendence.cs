@@ -16,10 +16,13 @@ namespace UnicomTICManagementSystem
     {
         private readonly int loggedInUserId;
         private readonly string userRole;
-        public StudentAttendence()
+
+        public StudentAttendence(int userId, string role)
         {
             InitializeComponent();
-            
+            loggedInUserId = userId;
+            userRole = role;
+
             StdAtcomboBox.SelectedIndexChanged += (s, e) => LoadStudentAttendance();
             StdAtdateTimePicker.ValueChanged += (s, e) => LoadStudentAttendance();
             StdTiSearchBtn.Click += StdTiSearchBtn_Click;
@@ -27,11 +30,57 @@ namespace UnicomTICManagementSystem
 
         private void StudentAttendence_Load(object sender, EventArgs e)
         {
+            if (userRole == "Student")
+            {
+                // Hide and disable search controls for student
+                StdAtSearch.Enabled = false;
+                StdAtSearch.Visible = false;
+                StdTiSearchBtn.Visible = false;
 
+                LoadLoggedInStudentDetails();
+            }
+        }
+
+        private void LoadLoggedInStudentDetails()
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                string query = "SELECT StdId, StdName, StdAddress, StdPhone FROM Students WHERE UserId = @UserId";
+
+                using (var cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserId", loggedInUserId);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            int stdId = Convert.ToInt32(reader["StdId"]);
+                            StdAtSearch.Text = stdId.ToString(); // Set hidden for student usage
+
+                            StdAtName.Text = reader["StdName"].ToString();
+                            StdAtAddress.Text = reader["StdAddress"].ToString();
+                            StdAtPhone.Text = reader["StdPhone"].ToString();
+
+                            LoadSubjectsForStudent(stdId);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Student record not found.");
+                        }
+                    }
+                }
+            }
         }
 
         private void StdTiSearchBtn_Click(object sender, EventArgs e)
         {
+            if (userRole == "Student")
+            {
+                MessageBox.Show("Access denied.");
+                return;
+            }
+
             string studentIdText = StdAtSearch.Text.Trim();
 
             if (!int.TryParse(studentIdText, out int studentId))
@@ -56,7 +105,7 @@ namespace UnicomTICManagementSystem
                             StdAtAddress.Text = reader["StdAddress"].ToString();
                             StdAtPhone.Text = reader["StdPhone"].ToString();
 
-                            LoadSubjectsForStudent(studentId); // Populate Subject ComboBox
+                            LoadSubjectsForStudent(studentId);
                         }
                         else
                         {
@@ -75,10 +124,10 @@ namespace UnicomTICManagementSystem
             using (var conn = Dbconfig.GetConnection())
             {
                 string query = @"
-            SELECT DISTINCT sub.SubjectId, sub.SubjectName
-            FROM Subjects sub
-            JOIN Marks m ON sub.CourseId = m.CourseId
-            WHERE m.StdId = @StdId";
+                SELECT DISTINCT sub.SubjectId, sub.SubjectName
+                FROM Subjects sub
+                JOIN Marks m ON sub.CourseId = m.CourseId
+                WHERE m.StdId = @StdId";
 
                 using (var cmd = new SQLiteCommand(query, conn))
                 {
@@ -98,9 +147,10 @@ namespace UnicomTICManagementSystem
                 }
             }
 
-            StdAtcomboBox.Tag = subjectList; // Store IDs for later use
+            StdAtcomboBox.Tag = subjectList;
+            if (StdAtcomboBox.Items.Count > 0)
+                StdAtcomboBox.SelectedIndex = 0;
         }
-
 
         private void LoadStudentAttendance()
         {
@@ -115,28 +165,40 @@ namespace UnicomTICManagementSystem
             int subjectId = selectedSubject.Item1;
             int studentId;
 
-            if (!int.TryParse(StdAtSearch.Text.Trim(), out studentId))
+            // If Student role, force use own ID
+            if (userRole == "Student")
             {
-                MessageBox.Show("Invalid student ID.");
-                return;
+                if (!int.TryParse(StdAtSearch.Text.Trim(), out studentId))
+                {
+                    MessageBox.Show("Invalid student ID.");
+                    return;
+                }
+            }
+            else
+            {
+                if (!int.TryParse(StdAtSearch.Text.Trim(), out studentId))
+                {
+                    MessageBox.Show("Please enter a valid student ID.");
+                    return;
+                }
             }
 
-            string selectedDateString = StdAtdateTimePicker.Value.ToString("D"); // e.g., Thursday, June 19, 2025
+            string selectedDateString = StdAtdateTimePicker.Value.ToString("D"); // Example: Thursday, June 19, 2025
 
             using (var conn = Dbconfig.GetConnection())
             {
                 string query = @"
-            SELECT Date, 
-                   (SELECT SubjectName FROM Subjects WHERE SubjectId = a.SubjectId) AS Subject,
-                   (SELECT StatusName FROM AddStatus WHERE StatusId = a.StatusId) AS Status
-            FROM Attendances a
-            WHERE a.StdId = @StdId AND a.SubjectId = @SubId AND a.Date = @Date";
+                SELECT Date, 
+                       (SELECT SubjectName FROM Subjects WHERE SubjectId = a.SubjectId) AS Subject,
+                       (SELECT StatusName FROM AddStatus WHERE StatusId = a.StatusId) AS Status
+                FROM Attendances a
+                WHERE a.StdId = @StdId AND a.SubjectId = @SubId AND a.Date = @Date";
 
                 using (var cmd = new SQLiteCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@StdId", studentId);
                     cmd.Parameters.AddWithValue("@SubId", subjectId);
-                    cmd.Parameters.AddWithValue("@Date", selectedDateString); // Match with stored format
+                    cmd.Parameters.AddWithValue("@Date", selectedDateString);
 
                     using (var adapter = new SQLiteDataAdapter(cmd))
                     {
@@ -146,7 +208,6 @@ namespace UnicomTICManagementSystem
                     }
                 }
             }
-
         }
     }
 }

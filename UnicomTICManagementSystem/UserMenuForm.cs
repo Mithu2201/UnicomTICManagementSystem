@@ -30,7 +30,7 @@ namespace UnicomTICManagementSystem
         }
         private void UserMenuForm_Load(object sender, EventArgs e)
         {
-            loadform(new RegistrationForm());
+            loadform(new RoleForm());
         }
 
         private void label6_Click(object sender, EventArgs e)

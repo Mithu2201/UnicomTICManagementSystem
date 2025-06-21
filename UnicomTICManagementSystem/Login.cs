@@ -111,7 +111,7 @@ namespace UnicomTICManagementSystem
 
         private void Login_Load(object sender, EventArgs e)
         {
-           
+            LogPass.UseSystemPasswordChar = true;
         }
 
         

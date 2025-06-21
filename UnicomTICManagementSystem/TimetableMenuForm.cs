@@ -29,7 +29,7 @@ namespace UnicomTICManagementSystem
         }
         private void TimetableMenuForm_Load(object sender, EventArgs e)
         {
-            loadform(new TimeTablesForm());
+            loadform(new AddRoomForm());
         }
 
         private void label6_Click(object sender, EventArgs e)

@@ -280,12 +280,17 @@ namespace UnicomTICManagementSystem
 
         private string GetGradeFromScore(int score)
         {
-            if (score >= 90) return "A+";
-            else if (score >= 80) return "A";
-            else if (score >= 70) return "B";
-            else if (score >= 60) return "C";
-            else if (score >= 50) return "D";
-            else return "F";
+            if (score >= 90 && score <= 100) return "A+";
+            else if (score >= 80 && score <= 89) return "A";
+            else if (score >= 70 && score <= 79) return "B";
+            else if (score >= 60 && score <= 69) return "C";
+            else if (score >= 50 && score <= 59) return "D";
+            else if (score >= 0 && score < 50) return "F";
+            else
+            {
+                MessageBox.Show("Invalid score. Please enter a score between 0 and 100.");
+                return string.Empty;
+            }
         }
     }
 }

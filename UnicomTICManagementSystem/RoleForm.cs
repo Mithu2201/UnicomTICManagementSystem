@@ -103,10 +103,28 @@ namespace UnicomTICManagementSystem
                 MessageBox.Show("Both Role Code and Role Name are required.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
+            using (var conn = Dbconfig.GetConnection())
+            {
+                
+                string checkQuery = "SELECT COUNT(*) FROM Roles WHERE RoleCode = @RoleCode";
+                using (var cmd = new SQLiteCommand(checkQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@RoleCode", Rocode.Text.Trim());
+                    int count = Convert.ToInt32(cmd.ExecuteScalar());
+
+                    if (count > 0)
+                    {
+                        MessageBox.Show("Role Code already exists. Please enter a unique Role Code.", "Duplicate Entry", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                }
+            }
+
             Role role = new Role
             {
-                RoleCode = Rocode.Text,
-                RoleName = Roname.Text
+                RoleCode = Rocode.Text.Trim(),
+                RoleName = Roname.Text.Trim()
             };
 
             RoleController controller = new RoleController();
