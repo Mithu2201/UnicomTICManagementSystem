@@ -94,7 +94,7 @@ namespace UnicomTICManagementSystem.Controllers
                         SubCode = reader.GetString(1),
                         Subname = reader.GetString(2),
                         CourseID = reader.GetInt32(3),
-                        CourseName = reader.IsDBNull(4) ? "" : reader.GetString(4) // ✅ Map CourseName
+                        CourseName = reader.IsDBNull(4) ? "" : reader.GetString(4) 
                     };
                     Subjects.Add(subj);
                 }

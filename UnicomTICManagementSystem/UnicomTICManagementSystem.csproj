@@ -51,52 +51,52 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddClassForm.cs">
+    <Compile Include="Views\AddClassForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddClassForm.Designer.cs">
+    <Compile Include="Views\AddClassForm.Designer.cs">
       <DependentUpon>AddClassForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AddExamForm.cs">
+    <Compile Include="Views\AddExamForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddExamForm.Designer.cs">
+    <Compile Include="Views\AddExamForm.Designer.cs">
       <DependentUpon>AddExamForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AddRoomForm.cs">
+    <Compile Include="Views\AddRoomForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddRoomForm.Designer.cs">
+    <Compile Include="Views\AddRoomForm.Designer.cs">
       <DependentUpon>AddRoomForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AddStatusForm.cs">
+    <Compile Include="Views\AddStatusForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddStatusForm.Designer.cs">
+    <Compile Include="Views\AddStatusForm.Designer.cs">
       <DependentUpon>AddStatusForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AddTimeForm.cs">
+    <Compile Include="Views\AddTimeForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddTimeForm.Designer.cs">
+    <Compile Include="Views\AddTimeForm.Designer.cs">
       <DependentUpon>AddTimeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AttendenceForm.cs">
+    <Compile Include="Views\AttendenceForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AttendenceForm.Designer.cs">
+    <Compile Include="Views\AttendenceForm.Designer.cs">
       <DependentUpon>AttendenceForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AttendenceMenu.cs">
+    <Compile Include="Views\AttendenceMenu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AttendenceMenu.Designer.cs">
+    <Compile Include="Views\AttendenceMenu.Designer.cs">
       <DependentUpon>AttendenceMenu.cs</DependentUpon>
     </Compile>
-    <Compile Include="ClassForm.cs">
+    <Compile Include="Views\ClassForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ClassForm.Designer.cs">
+    <Compile Include="Views\ClassForm.Designer.cs">
       <DependentUpon>ClassForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Controllers\AddClassController.cs" />
@@ -118,52 +118,52 @@
     <Compile Include="Controllers\SubjectControllers.cs" />
     <Compile Include="Controllers\TimetableController.cs" />
     <Compile Include="Controllers\UserController.cs" />
-    <Compile Include="CourseForm.cs">
+    <Compile Include="Views\CourseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CourseForm.Designer.cs">
+    <Compile Include="Views\CourseForm.Designer.cs">
       <DependentUpon>CourseForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="CourseMenuForm.cs">
+    <Compile Include="Views\CourseMenuForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CourseMenuForm.Designer.cs">
+    <Compile Include="Views\CourseMenuForm.Designer.cs">
       <DependentUpon>CourseMenuForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExamForm.cs">
+    <Compile Include="Views\ExamForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ExamForm.Designer.cs">
+    <Compile Include="Views\ExamForm.Designer.cs">
       <DependentUpon>ExamForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExamMenuForm.cs">
+    <Compile Include="Views\ExamMenuForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ExamMenuForm.Designer.cs">
+    <Compile Include="Views\ExamMenuForm.Designer.cs">
       <DependentUpon>ExamMenuForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="LectureForm.cs">
+    <Compile Include="Views\LectureForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LectureForm.Designer.cs">
+    <Compile Include="Views\LectureForm.Designer.cs">
       <DependentUpon>LectureForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Login.cs">
+    <Compile Include="Views\Login.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Login.Designer.cs">
+    <Compile Include="Views\Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainMenuForm.cs">
+    <Compile Include="Views\MainMenuForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainMenuForm.Designer.cs">
+    <Compile Include="Views\MainMenuForm.Designer.cs">
       <DependentUpon>MainMenuForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MarksForm.cs">
+    <Compile Include="Views\MarksForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MarksForm.Designer.cs">
+    <Compile Include="Views\MarksForm.Designer.cs">
       <DependentUpon>MarksForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\AddClass.cs" />
@@ -176,28 +176,28 @@
     <Compile Include="Models\Role.cs" />
     <Compile Include="Repository\Dbconfig.cs" />
     <Compile Include="Repository\Migration.cs" />
-    <Compile Include="RoleForm.cs">
+    <Compile Include="Views\RoleForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RoleForm.Designer.cs">
+    <Compile Include="Views\RoleForm.Designer.cs">
       <DependentUpon>RoleForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="RoomForm.cs">
+    <Compile Include="Views\RoomForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RoomForm.Designer.cs">
+    <Compile Include="Views\RoomForm.Designer.cs">
       <DependentUpon>RoomForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="StaffForm.cs">
+    <Compile Include="Views\StaffForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StaffForm.Designer.cs">
+    <Compile Include="Views\StaffForm.Designer.cs">
       <DependentUpon>StaffForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="RegistrationForm.cs">
+    <Compile Include="Views\RegistrationForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RegistrationForm.Designer.cs">
+    <Compile Include="Views\RegistrationForm.Designer.cs">
       <DependentUpon>RegistrationForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Course.cs" />
@@ -212,124 +212,124 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StudentAttendence.cs">
+    <Compile Include="Views\StudentAttendence.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StudentAttendence.Designer.cs">
+    <Compile Include="Views\StudentAttendence.Designer.cs">
       <DependentUpon>StudentAttendence.cs</DependentUpon>
     </Compile>
-    <Compile Include="StudentForm.cs">
+    <Compile Include="Views\StudentForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StudentForm.Designer.cs">
+    <Compile Include="Views\StudentForm.Designer.cs">
       <DependentUpon>StudentForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="StudentMarks.cs">
+    <Compile Include="Views\StudentMarks.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StudentMarks.Designer.cs">
+    <Compile Include="Views\StudentMarks.Designer.cs">
       <DependentUpon>StudentMarks.cs</DependentUpon>
     </Compile>
-    <Compile Include="StudentTimetableForm.cs">
+    <Compile Include="Views\StudentTimetableForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StudentTimetableForm.Designer.cs">
+    <Compile Include="Views\StudentTimetableForm.Designer.cs">
       <DependentUpon>StudentTimetableForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="StudentMenuForm.cs">
+    <Compile Include="Views\StudentMenuForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StudentMenuForm.Designer.cs">
+    <Compile Include="Views\StudentMenuForm.Designer.cs">
       <DependentUpon>StudentMenuForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SubjectForm.cs">
+    <Compile Include="Views\SubjectForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SubjectForm.Designer.cs">
+    <Compile Include="Views\SubjectForm.Designer.cs">
       <DependentUpon>SubjectForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TimetableMenuForm.cs">
+    <Compile Include="Views\TimetableMenuForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TimetableMenuForm.Designer.cs">
+    <Compile Include="Views\TimetableMenuForm.Designer.cs">
       <DependentUpon>TimetableMenuForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TimeTablesForm.cs">
+    <Compile Include="Views\TimeTablesForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TimeTablesForm.Designer.cs">
+    <Compile Include="Views\TimeTablesForm.Designer.cs">
       <DependentUpon>TimeTablesForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserForm.cs">
+    <Compile Include="Views\UserForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserForm.Designer.cs">
+    <Compile Include="Views\UserForm.Designer.cs">
       <DependentUpon>UserForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserMenuForm.cs">
+    <Compile Include="Views\UserMenuForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserMenuForm.Designer.cs">
+    <Compile Include="Views\UserMenuForm.Designer.cs">
       <DependentUpon>UserMenuForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="AddClassForm.resx">
+    <EmbeddedResource Include="Views\AddClassForm.resx">
       <DependentUpon>AddClassForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AddExamForm.resx">
+    <EmbeddedResource Include="Views\AddExamForm.resx">
       <DependentUpon>AddExamForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AddRoomForm.resx">
+    <EmbeddedResource Include="Views\AddRoomForm.resx">
       <DependentUpon>AddRoomForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AddStatusForm.resx">
+    <EmbeddedResource Include="Views\AddStatusForm.resx">
       <DependentUpon>AddStatusForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AddTimeForm.resx">
+    <EmbeddedResource Include="Views\AddTimeForm.resx">
       <DependentUpon>AddTimeForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AttendenceForm.resx">
+    <EmbeddedResource Include="Views\AttendenceForm.resx">
       <DependentUpon>AttendenceForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AttendenceMenu.resx">
+    <EmbeddedResource Include="Views\AttendenceMenu.resx">
       <DependentUpon>AttendenceMenu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ClassForm.resx">
+    <EmbeddedResource Include="Views\ClassForm.resx">
       <DependentUpon>ClassForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CourseForm.resx">
+    <EmbeddedResource Include="Views\CourseForm.resx">
       <DependentUpon>CourseForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CourseMenuForm.resx">
+    <EmbeddedResource Include="Views\CourseMenuForm.resx">
       <DependentUpon>CourseMenuForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ExamForm.resx">
+    <EmbeddedResource Include="Views\ExamForm.resx">
       <DependentUpon>ExamForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ExamMenuForm.resx">
+    <EmbeddedResource Include="Views\ExamMenuForm.resx">
       <DependentUpon>ExamMenuForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LectureForm.resx">
+    <EmbeddedResource Include="Views\LectureForm.resx">
       <DependentUpon>LectureForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Login.resx">
+    <EmbeddedResource Include="Views\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainMenuForm.resx">
+    <EmbeddedResource Include="Views\MainMenuForm.resx">
       <DependentUpon>MainMenuForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MarksForm.resx">
+    <EmbeddedResource Include="Views\MarksForm.resx">
       <DependentUpon>MarksForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="RoleForm.resx">
+    <EmbeddedResource Include="Views\RoleForm.resx">
       <DependentUpon>RoleForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="RoomForm.resx">
+    <EmbeddedResource Include="Views\RoomForm.resx">
       <DependentUpon>RoomForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StaffForm.resx">
+    <EmbeddedResource Include="Views\StaffForm.resx">
       <DependentUpon>StaffForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="RegistrationForm.resx">
+    <EmbeddedResource Include="Views\RegistrationForm.resx">
       <DependentUpon>RegistrationForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -342,34 +342,34 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="StudentAttendence.resx">
+    <EmbeddedResource Include="Views\StudentAttendence.resx">
       <DependentUpon>StudentAttendence.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StudentForm.resx">
+    <EmbeddedResource Include="Views\StudentForm.resx">
       <DependentUpon>StudentForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StudentMarks.resx">
+    <EmbeddedResource Include="Views\StudentMarks.resx">
       <DependentUpon>StudentMarks.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StudentMenuForm.resx">
+    <EmbeddedResource Include="Views\StudentMenuForm.resx">
       <DependentUpon>StudentMenuForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StudentTimetableForm.resx">
+    <EmbeddedResource Include="Views\StudentTimetableForm.resx">
       <DependentUpon>StudentTimetableForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SubjectForm.resx">
+    <EmbeddedResource Include="Views\SubjectForm.resx">
       <DependentUpon>SubjectForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TimetableMenuForm.resx">
+    <EmbeddedResource Include="Views\TimetableMenuForm.resx">
       <DependentUpon>TimetableMenuForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TimeTablesForm.resx">
+    <EmbeddedResource Include="Views\TimeTablesForm.resx">
       <DependentUpon>TimeTablesForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserForm.resx">
+    <EmbeddedResource Include="Views\UserForm.resx">
       <DependentUpon>UserForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserMenuForm.resx">
+    <EmbeddedResource Include="Views\UserMenuForm.resx">
       <DependentUpon>UserMenuForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
@@ -395,6 +395,7 @@
   <ItemGroup>
     <None Include="Resources\Login Unicom.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
