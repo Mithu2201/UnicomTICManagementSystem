@@ -40,6 +40,30 @@ namespace UnicomTICManagementSystem.Controllers
             }
         }
 
+        public AddStatus SearchStatusByName(string statusName)
+        {
+            string query = "SELECT * FROM AddStatus WHERE StatusName = @StatusName LIMIT 1";
+
+            using (var conn = Dbconfig.GetConnection())
+            using (var cmd = new SQLiteCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@StatusName", statusName);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new AddStatus
+                        {
+                            AddStatusID = Convert.ToInt32(reader["StatusId"]),
+                            AddStatusName = reader["StatusName"].ToString()
+                        };
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public void DeleteClass(int id)
         {
             string deleteQuery = "DELETE FROM AddStatus WHERE StatusId = @StatusId";

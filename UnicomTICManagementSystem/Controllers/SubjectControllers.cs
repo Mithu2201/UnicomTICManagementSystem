@@ -48,6 +48,38 @@ namespace UnicomTICManagementSystem.Controllers
             }
         }
 
+        public Subject SearchSubjectByName(string subjectName)
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                string query = @"
+            SELECT * FROM Subjects 
+            WHERE SubjectName LIKE @Name
+            LIMIT 1";
+
+                using (var cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Name", $"%{subjectName}%");
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new Subject
+                            {
+                                SubID = reader.GetInt32(reader.GetOrdinal("SubjectId")),
+                                SubCode = reader.GetString(reader.GetOrdinal("SubjectCode")),
+                                Subname = reader.GetString(reader.GetOrdinal("SubjectName")),
+                                CourseID = reader.GetInt32(reader.GetOrdinal("CourseId"))
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+
         public Subject GetsubjectById(int id)
         {
             using (var conn = Dbconfig.GetConnection())

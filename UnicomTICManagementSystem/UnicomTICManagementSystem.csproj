@@ -51,6 +51,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\StudentAttendanceController.cs" />
+    <Compile Include="Controllers\StudentMarkController.cs" />
+    <Compile Include="Controllers\StudentTimeTableController.cs" />
+    <Compile Include="Enums\UserRole.cs" />
+    <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\StudentAttendanceModel.cs" />
+    <Compile Include="Models\StudentMarkModel.cs" />
+    <Compile Include="Models\StudentTimeTable.cs" />
     <Compile Include="Views\AddClassForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -109,7 +118,6 @@
     <Compile Include="Controllers\CourseController.cs" />
     <Compile Include="Controllers\ExamController.cs" />
     <Compile Include="Controllers\LectureControllers.cs" />
-    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MarkController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\RoomController.cs" />

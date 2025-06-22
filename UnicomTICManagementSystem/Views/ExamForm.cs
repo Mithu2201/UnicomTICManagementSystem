@@ -146,35 +146,19 @@ namespace UnicomTICManagementSystem
 
             if (!string.IsNullOrEmpty(subjectName))
             {
-                using (var conn = Dbconfig.GetConnection())
+                Exam foundExam = examController.SearchExamBySubjectName(subjectName);
+
+                if (foundExam != null)
                 {
-                    string query = @"
-                SELECT e.ExamId, e.ExamName, e.ExamMode, e.SubjectID, s.SubjectName
-                FROM Exams e
-                JOIN Subjects s ON e.SubjectID = s.SubjectId
-                WHERE s.SubjectName LIKE @SubName
-                LIMIT 1";
-
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@SubName", $"%{subjectName}%");
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                selectedExamId = Convert.ToInt32(reader["ExamId"]);
-                                ExcomboBox.Text = reader["ExamName"].ToString();
-                                TypecomboBox.Text = reader["ExamMode"].ToString();
-                                ExamcomboBox.SelectedValue = Convert.ToInt32(reader["SubjectID"]);
-                            }
-                            else
-                            {
-                                MessageBox.Show("No exam found for that subject.");
-                                ClearForm();
-                            }
-                        }
-                    }
+                    selectedExamId = foundExam.ExID;
+                    ExcomboBox.Text = foundExam.Exname;
+                    TypecomboBox.Text = foundExam.Exmode;
+                    ExamcomboBox.SelectedValue = foundExam.SubID;
+                }
+                else
+                {
+                    MessageBox.Show("No exam found for that subject.");
+                    ClearForm();
                 }
             }
             else
@@ -182,6 +166,7 @@ namespace UnicomTICManagementSystem
                 MessageBox.Show("Please enter or select a subject to search.");
             }
         }
+
 
         private void ExamdataGridView_SelectionChanged(object sender, EventArgs e)
         {

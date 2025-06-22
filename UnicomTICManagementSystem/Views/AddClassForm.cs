@@ -114,33 +114,26 @@ namespace UnicomTICManagementSystem
             string searchName = Clname.Text.Trim();
             if (!string.IsNullOrEmpty(searchName))
             {
-                using (var conn = Dbconfig.GetConnection())
+                var controller = new AddClassController();
+                var result = controller.SearchClassByName(searchName);
+
+                if (result != null)
                 {
-                    string query = "SELECT * FROM AddClasses WHERE ClName = @ClName LIMIT 1";
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@ClName", searchName);
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                selectedClassId = Convert.ToInt32(reader["ClId"]);
-                                Clname.Text = reader["ClName"].ToString();
-                                Clcode.Text = reader["ClMode"].ToString();
-                            }
-                            else
-                            {
-                                MessageBox.Show("Class not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                ClearInputFields();  // make sure you have this method defined
-                            }
-                        }
-                    }
+                    selectedClassId = result.AddClassID;
+                    Clname.Text = result.AddClassName;
+                    Clcode.Text = result.AddClassCode;
+                }
+                else
+                {
+                    MessageBox.Show("Class not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearInputFields();
                 }
             }
             else
             {
                 MessageBox.Show("Please enter a class name to search.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+            
         }
 
         private void button1_Click(object sender, EventArgs e)

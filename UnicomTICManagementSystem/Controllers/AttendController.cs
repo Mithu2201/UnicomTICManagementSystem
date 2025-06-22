@@ -56,6 +56,50 @@ namespace UnicomTICManagementSystem.Controllers
             }
         }
 
+        public Attendence SearchAttendenceByStudentName(string studentName)
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                string query = @"
+            SELECT a.AttenId, a.Date, 
+                   a.StatusId, s.StatusName,
+                   a.SubjectId, sub.SubjectName,
+                   a.StdId, stu.StdName
+            FROM Attendances a
+            LEFT JOIN AddStatus s ON a.StatusId = s.StatusId
+            LEFT JOIN Subjects sub ON a.SubjectId = sub.SubjectId
+            LEFT JOIN Students stu ON a.StdId = stu.StdId
+            WHERE stu.StdName LIKE @StdName
+            LIMIT 1";
+
+                using (var cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@StdName", $"%{studentName}%");
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new Attendence
+                            {
+                                AttendID = reader.GetInt32(0),
+                                Statusday = reader.GetString(1),
+                                StatusID = reader.GetInt32(2),
+                                Status = reader.IsDBNull(3) ? "" : reader.GetString(3),
+                                SubID = reader.GetInt32(4),
+                                Subname = reader.IsDBNull(5) ? "" : reader.GetString(5),
+                                StudentID = reader.GetInt32(6),
+                                StudentName = reader.IsDBNull(7) ? "" : reader.GetString(7)
+                            };
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+
         public Attendence GetAttendenceById(int id)
         {
             using (var conn = Dbconfig.GetConnection())

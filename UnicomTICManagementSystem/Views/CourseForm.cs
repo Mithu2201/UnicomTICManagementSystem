@@ -69,36 +69,29 @@ namespace UnicomTICManagementSystem
 
         private void Ssearch_Click(object sender, EventArgs e)
         {
-            string searchName = Coucode.Text.Trim();
+            string searchCode = Coucode.Text.Trim();
 
-            if (!string.IsNullOrEmpty(searchName))
+            if (!string.IsNullOrEmpty(searchCode))
             {
-                using (var conn = Dbconfig.GetConnection())
+                CourseController controller = new CourseController();
+                Course course = controller.SearchCourseByCode(searchCode);
+
+                if (course != null)
                 {
-                    string query = "SELECT * FROM Courses WHERE CouCode = @CouCode LIMIT 1";
-
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@CouCode", searchName);
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                selectedCourseId = Convert.ToInt32(reader["CouId"]);
-                                Coucode.Text = reader["CouCode"].ToString();
-                                Couname.Text = reader["CouName"].ToString();
-                                
-                            }
-                            else
-                            {
-                                MessageBox.Show("Course not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                ClearInputFields();
-                                selectedCourseId = -1;
-                            }
-                        }
-                    }
+                    selectedCourseId = course.CourseID;
+                    Coucode.Text = course.CourseCode;
+                    Couname.Text = course.CourseName;
                 }
+                else
+                {
+                    MessageBox.Show("Course not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearInputFields();
+                    selectedCourseId = -1;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please enter a Course Code to search.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -148,6 +141,8 @@ namespace UnicomTICManagementSystem
                 MessageBox.Show("Please select a Course from the grid to update.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
+
 
         private void Sdelete_Click(object sender, EventArgs e)
         {

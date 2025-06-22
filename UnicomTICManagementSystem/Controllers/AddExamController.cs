@@ -70,27 +70,30 @@ namespace UnicomTICManagementSystem.Controllers
             }
         }
 
-        public List<AddExam> GetAllExams()
+        public AddExam SearchExamByName(string examName)
         {
-            var exams = new List<AddExam>();
-
+            string query = "SELECT * FROM AddExams WHERE ExName = @ExName LIMIT 1";
             using (var conn = Dbconfig.GetConnection())
+            using (var cmd = new SQLiteCommand(query, conn))
             {
-                var cmd = new SQLiteCommand("SELECT * FROM AddExams", conn);
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
+                cmd.Parameters.AddWithValue("@ExName", examName);
+                using (var reader = cmd.ExecuteReader())
                 {
-                    exams.Add(new AddExam
+                    if (reader.Read())
                     {
-                        AddExamID = reader.GetInt32(0),
-                        AddExamCode = reader.GetString(1),
-                        AddExamName = reader.GetString(2)
-                    });
+                        return new AddExam
+                        {
+                            AddExamID = Convert.ToInt32(reader["ExId"]),
+                            AddExamCode = reader["ExName"].ToString(),
+                            AddExamName = reader["ExType"].ToString()
+                        };
+                    }
                 }
             }
-
-            return exams;
+            return null;
         }
+
+        
 
         public List<AddExam> GetExamNamesAndTypes()
         {
@@ -112,3 +115,4 @@ namespace UnicomTICManagementSystem.Controllers
         }
     }
 }
+

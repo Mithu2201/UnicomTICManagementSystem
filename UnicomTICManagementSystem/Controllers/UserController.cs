@@ -99,5 +99,33 @@ namespace UnicomTICManagementSystem.Controllers
                 }
             }
         }
+
+        public User SearchUserByName(string userName)
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                string query = "SELECT * FROM Users WHERE UserName = @UserName LIMIT 1";
+                using (var cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserName", userName);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new User
+                            {
+                                UserID = Convert.ToInt32(reader["UserId"]),
+                                UserName = reader["UserName"].ToString(),
+                                PassAdd = reader["UserPass"].ToString(),
+                                Role = reader["UserRole"].ToString()
+                            };
+                        }
+                    }
+                }
+            }
+            return null; // Not found
+        }
+
     }
 }

@@ -138,33 +138,27 @@ namespace UnicomTICManagementSystem
 
             if (!string.IsNullOrEmpty(searchName))
             {
-                using (var conn = Dbconfig.GetConnection())
+                StaffControllers controller = new StaffControllers();
+                Staffs staff = controller.SearchStaffByName(searchName);
+
+                if (staff != null)
                 {
-                    string query = "SELECT * FROM Staffs WHERE StaffName = @StaffName LIMIT 1";
-
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@StaffName", searchName);
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                selectedStaffId = Convert.ToInt32(reader["StaffId"]);
-                                Staname.Text = reader["StaffName"].ToString();
-                                StaPhone.Text = reader["StaffPhone"].ToString();
-                                StaAddress.Text = reader["StaffAddress"].ToString();
-
-                            }
-                            else
-                            {
-                                MessageBox.Show("Staff not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                ClearInputFields();
-                                selectedStaffId = -1;
-                            }
-                        }
-                    }
+                    selectedStaffId = staff.Stf_ID;
+                    Staname.Text = staff.Stf_Name;
+                    StaPhone.Text = staff.Stf_Phone;
+                    StaAddress.Text = staff.Stf_Address;
+                    // If you want to keep UserId for other operations, save it as needed
                 }
+                else
+                {
+                    MessageBox.Show("Staff not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearInputFields();
+                    selectedStaffId = -1;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please enter a staff name to search.", "Input Needed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
     }

@@ -118,34 +118,26 @@ namespace UnicomTICManagementSystem
         private void Ssearch_Click(object sender, EventArgs e)
         {
             string searchName = StatusSea.Text.Trim();
+
             if (!string.IsNullOrEmpty(searchName))
             {
-                using (var conn = Dbconfig.GetConnection())
+                var controller = new AddStatusController();
+                var result = controller.SearchStatusByName(searchName);
+
+                if (result != null)
                 {
-                    string query = "SELECT * FROM AddStatus WHERE StatusName = @StatusName LIMIT 1";
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@StatusName", searchName);
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                selectedStatusId = Convert.ToInt32(reader["StatusId"]);
-                                Status.Text = reader["StatusName"].ToString();
-                                
-                            }
-                            else
-                            {
-                                MessageBox.Show("Status not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                ClearInputFields();  // make sure you have this method defined
-                            }
-                        }
-                    }
+                    selectedStatusId = result.AddStatusID;
+                    Status.Text = result.AddStatusName;
+                }
+                else
+                {
+                    MessageBox.Show("Status not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearInputFields();
                 }
             }
             else
             {
-                MessageBox.Show("Please enter a class name to search.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter a status name to search.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
     }

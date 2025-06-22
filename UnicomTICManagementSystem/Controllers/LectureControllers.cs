@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using UnicomTICManagementSystem.Data;
+using UnicomTICManagementSystem.Models;
 
 namespace UnicomTICManagementSystem.Controllers
 {
@@ -77,5 +78,33 @@ namespace UnicomTICManagementSystem.Controllers
                 }
             }
         }
+
+        public Lectures SearchLectureByName(string lecName)
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                string query = "SELECT * FROM Lectures WHERE LecName = @LecName LIMIT 1";
+                using (var cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@LecName", lecName);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new Lectures
+                            {
+                                Lec_ID = Convert.ToInt32(reader["LecId"]),
+                                Lec_Name = reader["LecName"].ToString(),
+                                Lec_Phone = reader["LecPhone"].ToString(),
+                                Lec_Address = reader["LecAddress"].ToString(),
+                                User_ID = Convert.ToInt32(reader["UserId"])
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
     }
 }

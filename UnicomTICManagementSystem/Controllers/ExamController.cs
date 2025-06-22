@@ -47,6 +47,42 @@ namespace UnicomTICManagementSystem.Controllers
             }
         }
 
+        public Exam SearchExamBySubjectName(string subjectName)
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                string query = @"
+            SELECT e.ExamId, e.ExamName, e.ExamMode, e.SubjectID, s.SubjectName
+            FROM Exams e
+            JOIN Subjects s ON e.SubjectID = s.SubjectId
+            WHERE s.SubjectName LIKE @SubName
+            LIMIT 1";
+
+                using (var cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@SubName", $"%{subjectName}%");
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new Exam
+                            {
+                                ExID = Convert.ToInt32(reader["ExamId"]),
+                                Exname = reader["ExamName"].ToString(),
+                                Exmode = reader["ExamMode"].ToString(),
+                                SubID = Convert.ToInt32(reader["SubjectID"]),
+                                Subname = reader["SubjectName"].ToString()
+                            };
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+
         public Exam GetExamById(int id)
         {
             using (var conn = Dbconfig.GetConnection())

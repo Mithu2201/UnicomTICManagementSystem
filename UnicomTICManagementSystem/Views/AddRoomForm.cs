@@ -111,28 +111,28 @@ namespace UnicomTICManagementSystem
 
         private void Ssearch_Click(object sender, EventArgs e)
         {
-            string searchCode = Rocode.Text.Trim();  // Get input from Rocode.Text (Room Name)
+            string searchCode = Rocode.Text.Trim();
 
-            using (var conn = Dbconfig.GetConnection())
+            if (!string.IsNullOrEmpty(searchCode))
             {
-                
-                var cmd = new SQLiteCommand("SELECT * FROM AddRooms WHERE RoName = @RoName LIMIT 1", conn);
-                cmd.Parameters.AddWithValue("@RoName", searchCode);
+                var controller = new AddRoomController();
+                var result = controller.SearchRoomByName(searchCode);
 
-                using (var reader = cmd.ExecuteReader())
+                if (result != null)
                 {
-                    if (reader.Read())
-                    {
-                        selectedRoomId = Convert.ToInt32(reader["RoId"]);
-                        Rocode.Text = reader["RoName"].ToString(); // Room Name
-                        Roname.Text = reader["RoType"].ToString(); // Room Type
-                    }
-                    else
-                    {
-                        MessageBox.Show("Room not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        ClearInputFields();
-                    }
+                    selectedRoomId = result.AddRoomID;
+                    Rocode.Text = result.AddRoomCode;
+                    Roname.Text = result.AddRoomName;
                 }
+                else
+                {
+                    MessageBox.Show("Room not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearInputFields();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please enter a room name to search.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

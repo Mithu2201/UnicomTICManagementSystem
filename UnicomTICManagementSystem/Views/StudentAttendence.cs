@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Data.SQLite;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using UnicomTICManagementSystem.Data;
+using UnicomTICManagementSystem.Controllers;
+using UnicomTICManagementSystem.Models;
 
 namespace UnicomTICManagementSystem
 {
@@ -17,11 +13,17 @@ namespace UnicomTICManagementSystem
         private readonly int loggedInUserId;
         private readonly string userRole;
 
+        private StudentAttendanceController _controller;
+        private List<(int SubjectId, string SubjectName)> _subjectList;
+
         public StudentAttendence(int userId, string role)
         {
             InitializeComponent();
+
             loggedInUserId = userId;
             userRole = role;
+
+            _controller = new StudentAttendanceController();
 
             StdAtcomboBox.SelectedIndexChanged += (s, e) => LoadStudentAttendance();
             StdAtdateTimePicker.ValueChanged += (s, e) => LoadStudentAttendance();
@@ -36,6 +38,7 @@ namespace UnicomTICManagementSystem
                 StdAtSearch.Enabled = false;
                 StdAtSearch.Visible = false;
                 StdTiSearchBtn.Visible = false;
+                label1.Visible = false;
 
                 LoadLoggedInStudentDetails();
             }
@@ -43,129 +46,73 @@ namespace UnicomTICManagementSystem
 
         private void LoadLoggedInStudentDetails()
         {
-            using (var conn = Dbconfig.GetConnection())
+            var student = _controller.GetStudentDetailsByUserId(loggedInUserId);
+            if (student != null)
             {
-                string query = "SELECT StdId, StdName, StdAddress, StdPhone FROM Students WHERE UserId = @UserId";
+                StdAtSearch.Text = student.StdId.ToString();
+                StdAtName.Text = student.StdName;
+                StdAtAddress.Text = student.StdAddress;
+                StdAtPhone.Text = student.StdPhone;
 
-                using (var cmd = new SQLiteCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@UserId", loggedInUserId);
-
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            int stdId = Convert.ToInt32(reader["StdId"]);
-                            StdAtSearch.Text = stdId.ToString(); // Set hidden for student usage
-
-                            StdAtName.Text = reader["StdName"].ToString();
-                            StdAtAddress.Text = reader["StdAddress"].ToString();
-                            StdAtPhone.Text = reader["StdPhone"].ToString();
-
-                            LoadSubjectsForStudent(stdId);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Student record not found.");
-                        }
-                    }
-                }
+                LoadSubjectsForStudent(student.StdId);
+            }
+            else
+            {
+                MessageBox.Show("Student record not found.");
             }
         }
 
         private void StdTiSearchBtn_Click(object sender, EventArgs e)
         {
-            if (userRole == "Student")
-            {
-                MessageBox.Show("Access denied.");
-                return;
-            }
-
-            string studentIdText = StdAtSearch.Text.Trim();
-
-            if (!int.TryParse(studentIdText, out int studentId))
+            if (!int.TryParse(StdAtSearch.Text.Trim(), out int studentId))
             {
                 MessageBox.Show("Please enter a valid numeric Student ID.");
                 return;
             }
 
-            using (var conn = Dbconfig.GetConnection())
+            var student = _controller.GetStudentDetailsById(studentId);
+            if (student != null)
             {
-                string query = "SELECT StdName, StdAddress, StdPhone FROM Students WHERE StdId = @StdId";
+                StdAtName.Text = student.StdName;
+                StdAtAddress.Text = student.StdAddress;
+                StdAtPhone.Text = student.StdPhone;
 
-                using (var cmd = new SQLiteCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@StdId", studentId);
-
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            StdAtName.Text = reader["StdName"].ToString();
-                            StdAtAddress.Text = reader["StdAddress"].ToString();
-                            StdAtPhone.Text = reader["StdPhone"].ToString();
-
-                            LoadSubjectsForStudent(studentId);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Student not found.");
-                        }
-                    }
-                }
+                LoadSubjectsForStudent(studentId);
+            }
+            else
+            {
+                MessageBox.Show("Student not found.");
             }
         }
 
         private void LoadSubjectsForStudent(int studentId)
         {
             StdAtcomboBox.Items.Clear();
-            var subjectList = new List<Tuple<int, string>>();
+            _subjectList = _controller.GetSubjectsForStudent(studentId);
 
-            using (var conn = Dbconfig.GetConnection())
+            foreach (var subject in _subjectList)
             {
-                string query = @"
-                SELECT DISTINCT sub.SubjectId, sub.SubjectName
-                FROM Subjects sub
-                JOIN Marks m ON sub.CourseId = m.CourseId
-                WHERE m.StdId = @StdId";
-
-                using (var cmd = new SQLiteCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@StdId", studentId);
-
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            int id = reader.GetInt32(0);
-                            string name = reader.GetString(1);
-
-                            subjectList.Add(Tuple.Create(id, name));
-                            StdAtcomboBox.Items.Add(name);
-                        }
-                    }
-                }
+                StdAtcomboBox.Items.Add(subject.SubjectName);
             }
 
-            StdAtcomboBox.Tag = subjectList;
             if (StdAtcomboBox.Items.Count > 0)
+            {
                 StdAtcomboBox.SelectedIndex = 0;
+            }
         }
 
         private void LoadStudentAttendance()
         {
-            if (StdAtcomboBox.SelectedItem == null || StdAtcomboBox.Tag == null)
+            if (StdAtcomboBox.SelectedItem == null || _subjectList == null)
                 return;
 
-            var subjectList = StdAtcomboBox.Tag as List<Tuple<int, string>>;
             string selectedSubjectName = StdAtcomboBox.SelectedItem.ToString();
-            var selectedSubject = subjectList.FirstOrDefault(s => s.Item2 == selectedSubjectName);
-            if (selectedSubject == null) return;
+            var selectedSubject = _subjectList.FirstOrDefault(s => s.SubjectName == selectedSubjectName);
+            if (selectedSubject == default) return;
 
-            int subjectId = selectedSubject.Item1;
+            int subjectId = selectedSubject.SubjectId;
             int studentId;
 
-            // If Student role, force use own ID
             if (userRole == "Student")
             {
                 if (!int.TryParse(StdAtSearch.Text.Trim(), out studentId))
@@ -183,31 +130,10 @@ namespace UnicomTICManagementSystem
                 }
             }
 
-            string selectedDateString = StdAtdateTimePicker.Value.ToString("D"); // Example: Thursday, June 19, 2025
+            string selectedDateString = StdAtdateTimePicker.Value.ToString("D");
 
-            using (var conn = Dbconfig.GetConnection())
-            {
-                string query = @"
-                SELECT Date, 
-                       (SELECT SubjectName FROM Subjects WHERE SubjectId = a.SubjectId) AS Subject,
-                       (SELECT StatusName FROM AddStatus WHERE StatusId = a.StatusId) AS Status
-                FROM Attendances a
-                WHERE a.StdId = @StdId AND a.SubjectId = @SubId AND a.Date = @Date";
-
-                using (var cmd = new SQLiteCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@StdId", studentId);
-                    cmd.Parameters.AddWithValue("@SubId", subjectId);
-                    cmd.Parameters.AddWithValue("@Date", selectedDateString);
-
-                    using (var adapter = new SQLiteDataAdapter(cmd))
-                    {
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-                        StdAtdataGridView.DataSource = dt;
-                    }
-                }
-            }
+            DataTable attendanceData = _controller.GetAttendanceRecords(studentId, subjectId, selectedDateString);
+            StdAtdataGridView.DataSource = attendanceData;
         }
     }
 }

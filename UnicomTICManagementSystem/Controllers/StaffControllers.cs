@@ -79,5 +79,33 @@ namespace UnicomTICManagementSystem.Controllers
                 }
             }
         }
+
+        public Staffs SearchStaffByName(string staffName)
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                string query = "SELECT * FROM Staffs WHERE StaffName = @StaffName LIMIT 1";
+                using (var cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@StaffName", staffName);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new Staffs
+                            {
+                                Stf_ID = Convert.ToInt32(reader["StaffId"]),
+                                Stf_Name = reader["StaffName"].ToString(),
+                                Stf_Phone = reader["StaffPhone"].ToString(),
+                                Stf_Address = reader["StaffAddress"].ToString(),
+                                User_ID = Convert.ToInt32(reader["UserId"])
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
     }
 }

@@ -59,6 +59,53 @@ namespace UnicomTICManagementSystem.Controllers
             }
         }
 
+        public Timetable SearchTimetableBySubjectName(string subjectName)
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                string query = @"
+            SELECT t.TimeId, t.TimeDay, t.TimeSlot, 
+                   t.RoomId, r.RoomMode,
+                   t.CourseID, c.CouName,
+                   t.SubID, s.SubjectName,
+                   t.LecID, l.LecName
+            FROM TimeTables t
+            LEFT JOIN Rooms r ON t.RoomId = r.RoomId
+            LEFT JOIN Courses c ON t.CourseID = c.CouId
+            LEFT JOIN Subjects s ON t.SubID = s.SubjectId
+            LEFT JOIN lectures l ON t.LecID = l.LecId
+            WHERE s.SubjectName LIKE @SubjectName
+            LIMIT 1";
+
+                using (var cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@SubjectName", $"%{subjectName}%");
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new Timetable
+                            {
+                                TiID = Convert.ToInt32(reader["TimeId"]),
+                                Tiday = reader["TimeDay"].ToString(),
+                                Tislot = reader["TimeSlot"].ToString(),
+                                RoID = Convert.ToInt32(reader["RoomId"]),
+                                Roname = reader.IsDBNull(reader.GetOrdinal("RoomMode")) ? "" : reader["RoomMode"].ToString(),
+                                CourseID = Convert.ToInt32(reader["CourseID"]),
+                                CourseName = reader.IsDBNull(reader.GetOrdinal("CouName")) ? "" : reader["CouName"].ToString(),
+                                SubID = Convert.ToInt32(reader["SubID"]),
+                                Subname = reader.IsDBNull(reader.GetOrdinal("SubjectName")) ? "" : reader["SubjectName"].ToString(),
+                                LecID = Convert.ToInt32(reader["LecID"]),
+                                LecName = reader.IsDBNull(reader.GetOrdinal("LecName")) ? "" : reader["LecName"].ToString()
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
         public Timetable GetTimetableById(int id)
         {
             using (var conn = Dbconfig.GetConnection())

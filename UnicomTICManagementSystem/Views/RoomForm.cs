@@ -193,35 +193,40 @@ namespace UnicomTICManagementSystem
 
             if (!string.IsNullOrEmpty(searchName))
             {
-                using (var conn = Dbconfig.GetConnection())
+                var room = roomController.SearchRoomByName(searchName);
+                if (room != null)
                 {
-                    string query = "SELECT * FROM Rooms WHERE RooomName LIKE @Name LIMIT 1";
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@Name", $"%{searchName}%");
+                    selectedRoomId = room.RoID;
+                    RoRoomcomboBox.Text = room.Roname;
+                    RoTypecomboBox.Text = room.Rotype;
 
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                selectedRoomId = Convert.ToInt32(reader["RoomId"]);
-                                RoRoomcomboBox.Text = reader["RooomName"].ToString();
-                                RoTypecomboBox.Text = reader["RoomMode"].ToString();
-                                RoomcomboBox.SelectedValue = Convert.ToInt32(reader["ExamID"]);
-                            }
-                            else
-                            {
-                                MessageBox.Show("Room not found.");
-                                ClearForm();
-                            }
-                        }
+                    // Select RoomcomboBox based on StudyMode
+                    if (room.ClID.HasValue)
+                    {
+                        StucomboBox.SelectedItem = "Class";
+                        RoomcomboBox.SelectedValue = room.ClID.Value;
                     }
+                    else if (room.ExID.HasValue)
+                    {
+                        StucomboBox.SelectedItem = "Exam";
+                        RoomcomboBox.SelectedValue = room.ExID.Value;
+                    }
+                    else
+                    {
+                        RoomcomboBox.SelectedIndex = -1;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Room not found.");
+                    ClearForm();
                 }
             }
             else
             {
                 MessageBox.Show("Enter room name to search.");
             }
+            
         }
 
 

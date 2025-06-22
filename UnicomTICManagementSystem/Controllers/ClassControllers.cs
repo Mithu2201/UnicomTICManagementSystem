@@ -46,6 +46,40 @@ namespace UnicomTICManagementSystem.Controllers
             }
         }
 
+        public Class SearchClassBySubjectName(string subjectName)
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                string query = @"
+            SELECT c.ClassId, c.ClassName, c.ClassMode, c.SubjectID, s.SubjectName
+            FROM Classes c
+            JOIN Subjects s ON c.SubjectID = s.SubjectId
+            WHERE s.SubjectName LIKE @SubName
+            LIMIT 1";
+
+                using (var cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@SubName", $"%{subjectName}%");
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new Class
+                            {
+                                ClID = Convert.ToInt32(reader["ClassId"]),
+                                Clname = reader["ClassName"].ToString(),
+                                Clmode = reader["ClassMode"].ToString(),
+                                SubID = Convert.ToInt32(reader["SubjectID"]),
+                                Subname = reader["SubjectName"].ToString()
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
         public List<Class> GetAllClasses()
         {
             var classList = new List<Class>();

@@ -68,31 +68,25 @@ namespace UnicomTICManagementSystem
 
             if (!string.IsNullOrEmpty(searchCode))
             {
-                using (var conn = Dbconfig.GetConnection())
+                RoleController controller = new RoleController();
+                Role role = controller.SearchRoleByCode(searchCode);
+
+                if (role != null)
                 {
-                    string query = "SELECT * FROM Roles WHERE RoleCode = @RoleCode LIMIT 1";
-
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@RoleCode", searchCode);
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                selectedRoleId = Convert.ToInt32(reader["RoleId"]);
-                                Rocode.Text = reader["RoleCode"].ToString();
-                                Roname.Text = reader["RoleName"].ToString();
-                            }
-                            else
-                            {
-                                MessageBox.Show("Role not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                ClearInputFields();
-                                selectedRoleId = -1;
-                            }
-                        }
-                    }
+                    selectedRoleId = role.RoleID;
+                    Rocode.Text = role.RoleCode;
+                    Roname.Text = role.RoleName;
                 }
+                else
+                {
+                    MessageBox.Show("Role not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearInputFields();
+                    selectedRoleId = -1;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please enter a Role Code to search.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

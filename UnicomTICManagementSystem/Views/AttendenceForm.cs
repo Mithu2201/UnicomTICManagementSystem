@@ -33,6 +33,7 @@ namespace UnicomTICManagementSystem
 
             this.Load += AttendenceForm_Load;
             AttenddataGridView.SelectionChanged += AttenddataGridView_SelectionChanged;
+            Ssearch.Click += Ssearch_Click;
 
             LoadAttendtables();
             LoadStudents();
@@ -214,6 +215,34 @@ namespace UnicomTICManagementSystem
                 LoadAttendtables();
                 ClearForm();
                 MessageBox.Show("Deleted Successfully");
+            }
+        }
+
+        private void Ssearch_Click(object sender, EventArgs e)
+        {
+            string studentName = AttStucomboBox.Text?.Trim();
+
+            if (!string.IsNullOrEmpty(studentName))
+            {
+                var result = attendControll.SearchAttendenceByStudentName(studentName);
+
+                if (result != null)
+                {
+                    selectedAttendId = result.AttendID;
+                    dateTimePicker.Text = result.Statusday;
+                    AttStucomboBox.SelectedValue = result.StudentID;
+                    AttSubcomboBox.SelectedValue = result.SubID;
+                    AttStacomboBox.SelectedValue = result.StatusID;
+                }
+                else
+                {
+                    MessageBox.Show("No attendance record found for that student.");
+                    ClearForm();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please enter or select a student name to search.");
             }
         }
     }

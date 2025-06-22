@@ -116,6 +116,51 @@ namespace UnicomTICManagementSystem.Controllers
             }
         }
 
+        public Mark SearchMarkBySubjectName(string subjectName)
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                string query = @"
+            SELECT m.MarksId, m.MarkScore, m.MarksGrade,
+                   s.StdId, s.StdName,
+                   c.CouId, c.CouName,
+                   sub.SubjectId, sub.SubjectName
+            FROM Marks m
+            JOIN Students s ON m.StdId = s.StdId
+            JOIN Courses c ON m.CourseId = c.CouId
+            JOIN Subjects sub ON m.SubjectId = sub.SubjectId
+            WHERE sub.SubjectName LIKE @subjectName
+            LIMIT 1";
+
+                using (var cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@subjectName", $"%{subjectName}%");
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new Mark
+                            {
+                                MaID = Convert.ToInt32(reader["MarksId"]),
+                                Mamark = reader["MarkScore"].ToString(),
+                                Magrade = reader["MarksGrade"].ToString(),
+                                StdID = Convert.ToInt32(reader["StdId"]),
+                                Stdname = reader["StdName"].ToString(),
+                                CourseId = Convert.ToInt32(reader["CouId"]),
+                                CourseName = reader["CouName"].ToString(),
+                                SubjectId = Convert.ToInt32(reader["SubjectId"]),
+                                SubjectName = reader["SubjectName"].ToString()
+                            };
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+
         public Mark GetMarkById(int id)
         {
             using (var conn = Dbconfig.GetConnection())

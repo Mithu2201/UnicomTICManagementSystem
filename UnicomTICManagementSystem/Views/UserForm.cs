@@ -72,33 +72,26 @@ namespace UnicomTICManagementSystem
 
             if (!string.IsNullOrEmpty(searchName))
             {
-                using (var conn = Dbconfig.GetConnection())
+                UserController controller = new UserController();
+                User user = controller.SearchUserByName(searchName);
+
+                if (user != null)
                 {
-                    string query = "SELECT * FROM Users WHERE UserName = @UserName LIMIT 1";
-
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@UserName", searchName);
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                selectedUserId = Convert.ToInt32(reader["UserId"]);
-                                UserName.Text = reader["UserName"].ToString();
-                                UserPass.Text = reader["UserPass"].ToString();
-                                UserRole.Text = reader["UserRole"].ToString();
-                                //StdCourse.Text = reader["CourseID"].ToString();
-                            }
-                            else
-                            {
-                                MessageBox.Show("User not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                ClearInputFields();
-                                selectedUserId = -1;
-                            }
-                        }
-                    }
+                    selectedUserId = user.UserID;
+                    UserName.Text = user.UserName;
+                    UserPass.Text = user.PassAdd;
+                    UserRole.Text = user.Role;
                 }
+                else
+                {
+                    MessageBox.Show("User not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearInputFields();
+                    selectedUserId = -1;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please enter a username to search.", "Input Needed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

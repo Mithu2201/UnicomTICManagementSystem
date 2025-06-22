@@ -70,6 +70,29 @@ namespace UnicomTICManagementSystem.Controllers
             }
         }
 
+        public Role SearchRoleByCode(string roleCode)
+        {
+            string query = "SELECT * FROM Roles WHERE RoleCode = @RoleCode LIMIT 1";
+            using (var conn = Dbconfig.GetConnection())
+            using (var cmd = new SQLiteCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@RoleCode", roleCode);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new Role
+                        {
+                            RoleID = Convert.ToInt32(reader["RoleId"]),
+                            RoleCode = reader["RoleCode"].ToString(),
+                            RoleName = reader["RoleName"].ToString()
+                        };
+                    }
+                }
+            }
+            return null; // Not found
+        }
+
         public List<Role> GetAllRoles()
         {
             var roles = new List<Role>();

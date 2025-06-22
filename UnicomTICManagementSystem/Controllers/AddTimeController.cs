@@ -59,25 +59,30 @@ namespace UnicomTICManagementSystem.Controllers
             }
         }
 
-        public List<AddTime> GetAllAddTimes()
+        public AddTime SearchAddTimeByDay(string day)
         {
-            var list = new List<AddTime>();
+            string query = "SELECT * FROM AddTimes WHERE TiDay = @TiDay LIMIT 1";
             using (var conn = Dbconfig.GetConnection())
+            using (var cmd = new SQLiteCommand(query, conn))
             {
-                var cmd = new SQLiteCommand("SELECT * FROM AddTimes", conn);
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
+                cmd.Parameters.AddWithValue("@TiDay", day);
+                using (var reader = cmd.ExecuteReader())
                 {
-                    list.Add(new AddTime
+                    if (reader.Read())
                     {
-                        AddTimeID = reader.GetInt32(0),
-                        AddTimeCode = reader.GetString(1),
-                        AddTimeName = reader.GetString(2)
-                    });
+                        return new AddTime
+                        {
+                            AddTimeID = Convert.ToInt32(reader["TiId"]),
+                            AddTimeCode = reader["TiDay"].ToString(),
+                            AddTimeName = reader["TiSlot"].ToString()
+                        };
+                    }
                 }
             }
-            return list;
+            return null;
         }
+
+        
 
         public List<AddTime> GetTimeDaysAndSlots()
         {

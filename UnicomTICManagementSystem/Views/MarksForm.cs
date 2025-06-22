@@ -207,52 +207,24 @@ namespace UnicomTICManagementSystem
 
         private void Ssearch_Click(object sender, EventArgs e)
         {
-            string subjectName = MarkScore.Text?.Trim(); // Using MarkScore textbox as search input
+            string subjectName = MarkScore.Text?.Trim(); // or any other input control you want to use for search
 
             if (!string.IsNullOrEmpty(subjectName))
             {
-                using (var conn = Dbconfig.GetConnection())
+                var mark = markController.SearchMarkBySubjectName(subjectName);
+                if (mark != null)
                 {
-                    conn.Open();
-
-                    string query = @"
-                SELECT m.MarksId, m.MarkScore, m.MarksGrade,
-                       s.StdId, s.StdName,
-                       c.CouId, c.CouName,
-                       sub.SubjectId, sub.SubjectName
-                FROM Marks m
-                JOIN Students s ON m.StdId = s.StdId
-                JOIN Courses c ON m.CourseId = c.CouId
-                JOIN Subjects sub ON m.SubjectId = sub.SubjectId
-                WHERE sub.SubjectName LIKE @subjectName
-                LIMIT 1";
-
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@subjectName", $"%{subjectName}%");
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                selectedMarkId = Convert.ToInt32(reader["MarksId"]);
-
-                                // Populate fields
-                                MarkScore.Text = reader["MarkScore"].ToString();
-                                Markgrade.Text = reader["MarksGrade"].ToString();
-
-                                // Set selected student, course, and subject
-                                MarkcomboBox.SelectedValue = Convert.ToInt32(reader["StdId"]);
-                                CoursecomboBox.SelectedValue = Convert.ToInt32(reader["CouId"]);
-                                SelectcomboBox.SelectedValue = Convert.ToInt32(reader["SubjectId"]);
-                            }
-                            else
-                            {
-                                MessageBox.Show("No marks found for that subject.");
-                                ClearForm();
-                            }
-                        }
-                    }
+                    selectedMarkId = mark.MaID;
+                    MarkScore.Text = mark.Mamark;
+                    Markgrade.Text = mark.Magrade;
+                    MarkcomboBox.SelectedValue = mark.StdID;
+                    CoursecomboBox.SelectedValue = mark.CourseId;
+                    SelectcomboBox.SelectedValue = mark.SubjectId;
+                }
+                else
+                {
+                    MessageBox.Show("No marks found for that subject.");
+                    ClearForm();
                 }
             }
             else

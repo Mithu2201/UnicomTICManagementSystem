@@ -171,35 +171,19 @@ namespace UnicomTICManagementSystem
 
             if (!string.IsNullOrEmpty(subjectName))
             {
-                using (var conn = Dbconfig.GetConnection())
+                var foundClass = classController.SearchClassBySubjectName(subjectName);
+
+                if (foundClass != null)
                 {
-                    string query = @"
-                                    SELECT c.ClassId, c.ClassName, c.ClassMode, c.SubjectID, s.SubjectName
-                                    FROM Classes c
-                                    JOIN Subjects s ON c.SubjectID = s.SubjectId
-                                    WHERE s.SubjectName LIKE @SubName
-                                    LIMIT 1";
-
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@SubName", $"%{subjectName}%");
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                selectedClassId = Convert.ToInt32(reader["ClassId"]);
-                                ClNamecomboBox.Text = reader["ClassName"].ToString();
-                                ClModecomboBox.Text = reader["ClassMode"].ToString();
-                                ClcomboBox.SelectedValue = Convert.ToInt32(reader["SubjectID"]);
-                            }
-                            else
-                            {
-                                MessageBox.Show("Class not found for that subject.");
-                                ClearForm();
-                            }
-                        }
-                    }
+                    selectedClassId = foundClass.ClID;
+                    ClNamecomboBox.Text = foundClass.Clname;
+                    ClModecomboBox.Text = foundClass.Clmode;
+                    ClcomboBox.SelectedValue = foundClass.SubID;
+                }
+                else
+                {
+                    MessageBox.Show("Class not found for that subject.");
+                    ClearForm();
                 }
             }
             else

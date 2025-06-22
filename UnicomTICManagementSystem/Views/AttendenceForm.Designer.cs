@@ -126,12 +126,13 @@
             // 
             // Ssearch
             // 
-            this.Ssearch.Location = new System.Drawing.Point(538, 5);
+            this.Ssearch.Location = new System.Drawing.Point(536, 33);
             this.Ssearch.Name = "Ssearch";
             this.Ssearch.Size = new System.Drawing.Size(75, 23);
             this.Ssearch.TabIndex = 73;
             this.Ssearch.Text = "Search";
             this.Ssearch.UseVisualStyleBackColor = true;
+            this.Ssearch.Click += new System.EventHandler(this.Ssearch_Click);
             // 
             // Sdelete
             // 

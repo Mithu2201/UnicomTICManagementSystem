@@ -80,6 +80,34 @@ namespace UnicomTICManagementSystem.Controllers
             }
         }
 
+        public Student SearchStudentByName(string studentName)
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                string query = "SELECT * FROM Students WHERE StdName = @StdName LIMIT 1";
+                using (var cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@StdName", studentName);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new Student
+                            {
+                                Std_ID = Convert.ToInt32(reader["StdId"]),
+                                Std_Name = reader["StdName"].ToString(),
+                                Std_Phone = reader["StdPhone"].ToString(),
+                                Std_Address = reader["StdAddress"].ToString(),
+                                User_ID = Convert.ToInt32(reader["UserId"])
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+
 
     }
 }

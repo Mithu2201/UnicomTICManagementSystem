@@ -246,41 +246,22 @@ namespace UnicomTICManagementSystem
 
             if (!string.IsNullOrEmpty(searchSubject))
             {
-                using (var conn = Dbconfig.GetConnection())
+                var timetable = TimeControll.SearchTimetableBySubjectName(searchSubject);
+                if (timetable != null)
                 {
-                    string query = @"
-                SELECT t.TimeId, t.TimeDay, t.TimeSlot, t.RoomId, r.RooomName, s.SubjectId, s.SubjectName
-                FROM TimeTables t
-                LEFT JOIN Rooms r ON t.RoomId = r.RoomId
-                LEFT JOIN Subjects s ON t.SubID = s.SubjectId
-                WHERE s.SubjectName LIKE @SubjectName
-                LIMIT 1";
+                    selectedTimeId = timetable.TiID;
 
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@SubjectName", $"%{searchSubject}%");
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                selectedTimeId = Convert.ToInt32(reader["TimeId"]);
-                                TiDaycomboBox.Text = reader["TimeDay"].ToString();
-                                TiSlotcomboBox.Text = reader["TimeSlot"].ToString();
-
-                                int roomId = Convert.ToInt32(reader["RoomId"]);
-                                TimecomboBox.SelectedValue = roomId;
-
-                                int subjectId = Convert.ToInt32(reader["SubjectId"]);
-                                SelectcomboBox.SelectedValue = subjectId;
-                            }
-                            else
-                            {
-                                MessageBox.Show("Timetable for the selected subject not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                ClearForm();
-                            }
-                        }
-                    }
+                    TiDaycomboBox.Text = timetable.Tiday;
+                    TiSlotcomboBox.Text = timetable.Tislot;
+                    TimecomboBox.SelectedValue = timetable.RoID;
+                    CoursecomboBox.SelectedValue = timetable.CourseID;
+                    SelectcomboBox.SelectedValue = timetable.SubID;
+                    LecturecomboBox.SelectedValue = timetable.LecID;
+                }
+                else
+                {
+                    MessageBox.Show("Timetable for the selected subject not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearForm();
                 }
             }
             else

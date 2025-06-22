@@ -138,33 +138,27 @@ namespace UnicomTICManagementSystem
 
             if (!string.IsNullOrEmpty(searchName))
             {
-                using (var conn = Dbconfig.GetConnection())
+                StudentController controller = new StudentController();
+                Student student = controller.SearchStudentByName(searchName);
+
+                if (student != null)
                 {
-                    string query = "SELECT * FROM Students WHERE StdName = @StdName LIMIT 1";
-
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@StdName", searchName);
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                selectedStudentId = Convert.ToInt32(reader["StdId"]);
-                                Stddname.Text = reader["StdName"].ToString();
-                                StddPhone.Text = reader["StdPhone"].ToString();
-                                StddAddress.Text = reader["StdAddress"].ToString();
-                                
-                            }
-                            else
-                            {
-                                MessageBox.Show("Student not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                ClearInputFields();
-                                selectedStudentId = -1;
-                            }
-                        }
-                    }
+                    selectedStudentId = student.Std_ID;
+                    Stddname.Text = student.Std_Name;
+                    StddPhone.Text = student.Std_Phone;
+                    StddAddress.Text = student.Std_Address;
+                    // Optionally, keep track of UserId if you need it elsewhere
                 }
+                else
+                {
+                    MessageBox.Show("Student not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearInputFields();
+                    selectedStudentId = -1;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please enter a student name to search.", "Input Needed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
     }

@@ -173,49 +173,33 @@ namespace UnicomTICManagementSystem
             }
         }
 
+
+
         private void Ssearch_Click(object sender, EventArgs e)
         {
             string searchName = SubName.Text.Trim();
 
             if (!string.IsNullOrEmpty(searchName))
             {
-                using (var conn = Dbconfig.GetConnection())
+                var subject = SubControll.SearchSubjectByName(searchName);
+                if (subject != null)
                 {
-                    string query = @"
-                SELECT * FROM Subjects 
-                WHERE SubjectName LIKE @Name
-                LIMIT 1";
-
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@Name", $"%{searchName}%");
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                selectSubjectId = Convert.ToInt32(reader["SubjectId"]);
-                                SubCode.Text = reader["SubjectCode"].ToString();
-                                SubName.Text = reader["SubjectName"].ToString();
-                                int courseId = Convert.ToInt32(reader["CourseId"]);
-
-                                // Set the dropdown to match the CourseID
-                                SubcomboBox.SelectedValue = courseId;
-                            }
-                            else
-                            {
-                                MessageBox.Show("Subject not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                ClearForm();
-                            }
-                        }
-                    }
+                    selectSubjectId = subject.SubID;
+                    SubCode.Text = subject.SubCode;
+                    SubName.Text = subject.Subname;
+                    SubcomboBox.SelectedValue = subject.CourseID;
+                }
+                else
+                {
+                    MessageBox.Show("Subject not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearForm();
                 }
             }
             else
             {
                 MessageBox.Show("Please enter a subject name to search.");
             }
-        
+
         }
 
         private void button1_Click(object sender, EventArgs e)

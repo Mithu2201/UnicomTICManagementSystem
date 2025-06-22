@@ -1,32 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SQLite;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using UnicomTICManagementSystem.Data;
+using UnicomTICManagementSystem.Controllers;
+using UnicomTICManagementSystem.Models;
+using UnicomTICManagementSystem.Enums;
 
 namespace UnicomTICManagementSystem
 {
     public partial class Login : Form
     {
-        private readonly string userRole;
-        private readonly int loggedInUserId;
+        private readonly LoginController loginController = new LoginController();
 
         public Login()
         {
             InitializeComponent();
-        }
-        public Login(int userId, string role)
-        {
-
-            InitializeComponent();
-            loggedInUserId = userId;
-            userRole = role;
         }
 
         private void Sign_Click(object sender, EventArgs e)
@@ -34,71 +20,25 @@ namespace UnicomTICManagementSystem
             string username = LogName.Text.Trim();
             string password = LogPass.Text.Trim();
 
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
                 MessageBox.Show("Please enter both username and password.");
                 return;
             }
 
-            using (var conn = Dbconfig.GetConnection())
+            LoginModel user = loginController.AuthenticateUser(username, password);
+
+            if (user != null)
             {
-                
-                string userQuery = "SELECT * FROM Users WHERE UserName = @username AND UserPass = @password";
-                using (var userCmd = new SQLiteCommand(userQuery, conn))
-                {
-                    userCmd.Parameters.AddWithValue("@username", username);
-                    userCmd.Parameters.AddWithValue("@password", password);
+                MessageBox.Show($"Welcome {user.FullName}!\n{user.UserRole}");
 
-                    using (var reader = userCmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            int userId = Convert.ToInt32(reader["UserId"]);
-                            string role = reader["UserRole"].ToString();
-
-                            string fullName = "";
-
-                            if (role == "Student")
-                            {
-                                fullName = GetNameFromTable(conn, "Students", "StdName", userId);
-                            }
-                            else if (role == "Staff")
-                            {
-                                fullName = GetNameFromTable(conn, "Staffs", "StaffName", userId);
-                            }
-                            else if (role == "Lecture")
-                            {
-                                fullName = GetNameFromTable(conn, "Lectures", "LecName", userId);
-                            }
-                            else
-                            { fullName = "Admin"; 
-                            }
-                                
-
-                            MessageBox.Show($"Welcome {fullName}!\n {role}");
-
-                            // Proceed to main menu
-                            MainMenuForm mainMenu = new MainMenuForm(userId, role);
-                            mainMenu.Show();
-                            this.Hide();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Invalid username or password.");
-                        }
-                    }
-                }
+                MainMenuForm mainMenu = new MainMenuForm(user.UserId, user.UserRole.ToString());
+                mainMenu.Show();
+                this.Hide();
             }
-        }
-
-        private string GetNameFromTable(SQLiteConnection conn, string tableName, string nameColumn, int userId)
-        {
-            string query = $"SELECT {nameColumn} FROM {tableName} WHERE UserId = @userId";
-            using (var cmd = new SQLiteCommand(query, conn))
+            else
             {
-                cmd.Parameters.AddWithValue("@userId", userId);
-                object result = cmd.ExecuteScalar();
-                return result?.ToString() ?? "Unknown";
+                MessageBox.Show("Invalid username or password.");
             }
         }
 
@@ -106,16 +46,11 @@ namespace UnicomTICManagementSystem
         {
             RegistrationForm regis = new RegistrationForm();
             regis.Show();
-            
         }
 
         private void Login_Load(object sender, EventArgs e)
         {
             LogPass.UseSystemPasswordChar = true;
         }
-
-        
     }
 }
-    
-

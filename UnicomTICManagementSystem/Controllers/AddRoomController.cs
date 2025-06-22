@@ -65,24 +65,29 @@ namespace UnicomTICManagementSystem.Controllers
             }
         }
 
-        public List<AddRooms> GetAllRooms()
+        public AddRooms SearchRoomByName(string roomName)
         {
-            var rooms = new List<AddRooms>();
+            string query = "SELECT * FROM AddRooms WHERE RoName = @RoName LIMIT 1";
+
             using (var conn = Dbconfig.GetConnection())
+            using (var cmd = new SQLiteCommand(query, conn))
             {
-                var cmd = new SQLiteCommand("SELECT * FROM AddRooms", conn);
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
+                cmd.Parameters.AddWithValue("@RoName", roomName);
+                using (var reader = cmd.ExecuteReader())
                 {
-                    rooms.Add(new AddRooms
+                    if (reader.Read())
                     {
-                        AddRoomID = Convert.ToInt32(reader["RoId"]),
-                        AddRoomCode = reader["RoName"].ToString(),
-                        AddRoomName = reader["RoType"].ToString()
-                    });
+                        return new AddRooms
+                        {
+                            AddRoomID = Convert.ToInt32(reader["RoId"]),
+                            AddRoomCode = reader["RoName"].ToString(),
+                            AddRoomName = reader["RoType"].ToString()
+                        };
+                    }
                 }
             }
-            return rooms;
+
+            return null;
         }
 
         public List<AddRooms> GetRoomNamesAndTypes()

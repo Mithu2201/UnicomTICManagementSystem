@@ -84,6 +84,30 @@ namespace UnicomTICManagementSystem.Controllers
             }
         }
 
+        public Course SearchCourseByCode(string code)
+        {
+            string query = "SELECT * FROM Courses WHERE CouCode = @CouCode LIMIT 1";
+
+            using (var conn = Dbconfig.GetConnection())
+            using (var cmd = new SQLiteCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@CouCode", code);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new Course
+                        {
+                            CourseID = Convert.ToInt32(reader["CouId"]),
+                            CourseCode = reader["CouCode"].ToString(),
+                            CourseName = reader["CouName"].ToString()
+                        };
+                    }
+                }
+            }
+            return null;
+        }
+
         public List<Course> GetAllCourse()
         {
             var Courses = new List<Course>();

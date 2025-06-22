@@ -48,6 +48,34 @@ namespace UnicomTICManagementSystem.Controllers
             }
         }
 
+        public Room SearchRoomByName(string roomName)
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                string query = "SELECT * FROM Rooms WHERE RooomName LIKE @Name LIMIT 1";
+                using (var cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Name", $"%{roomName}%");
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new Room
+                            {
+                                RoID = reader.GetInt32(reader.GetOrdinal("RoomId")),
+                                Roname = reader.GetString(reader.GetOrdinal("RooomName")),
+                                Rotype = reader.GetString(reader.GetOrdinal("RoomMode")),
+                                ExID = reader.IsDBNull(reader.GetOrdinal("ExamID")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("ExamID")),
+                                ClID = reader.IsDBNull(reader.GetOrdinal("ClassId")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("ClassId"))
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+
         public Room GetRoomById(int id)
         {
             using (var conn = Dbconfig.GetConnection())

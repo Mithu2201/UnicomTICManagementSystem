@@ -65,35 +65,29 @@ namespace UnicomTICManagementSystem
 
         private void Ssearch_Click(object sender, EventArgs e)
         {
-            string searchCode = Exname.Text.Trim();
+            string searchName = Exname.Text.Trim();
 
-            if (!string.IsNullOrEmpty(searchCode))
+            if (!string.IsNullOrEmpty(searchName))
             {
-                using (var conn = Dbconfig.GetConnection())
+                var controller = new AddExamController();
+                var result = controller.SearchExamByName(searchName);
+
+                if (result != null)
                 {
-                    string query = "SELECT * FROM AddExams WHERE ExName = @ExName LIMIT 1";
-
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@ExName", searchCode);
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                selectedExamId = Convert.ToInt32(reader["ExId"]);
-                                Exname.Text = reader["ExName"].ToString();
-                                ExType.Text = reader["ExType"].ToString();
-                            }
-                            else
-                            {
-                                MessageBox.Show("Exam not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                ClearInputFields();
-                                selectedExamId = -1;
-                            }
-                        }
-                    }
+                    selectedExamId = result.AddExamID;
+                    Exname.Text = result.AddExamCode;
+                    ExType.Text = result.AddExamName;
                 }
+                else
+                {
+                    MessageBox.Show("Exam not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearInputFields();
+                    selectedExamId = -1;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please enter an exam name to search.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

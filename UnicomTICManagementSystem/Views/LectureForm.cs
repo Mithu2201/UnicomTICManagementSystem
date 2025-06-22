@@ -111,33 +111,27 @@ namespace UnicomTICManagementSystem
 
             if (!string.IsNullOrEmpty(searchName))
             {
-                using (var conn = Dbconfig.GetConnection())
+                LectureControllers controller = new LectureControllers();
+                Lectures lecture = controller.SearchLectureByName(searchName);
+
+                if (lecture != null)
                 {
-                    string query = "SELECT * FROM Lectures WHERE LecName = @LecName LIMIT 1";
-
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@LecName", searchName);
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                selectedLectureId = Convert.ToInt32(reader["LecId"]);
-                                Lecname.Text = reader["LecName"].ToString();
-                                LecPhone.Text = reader["LecPhone"].ToString();
-                                LecAddress.Text = reader["LecAddress"].ToString();
-
-                            }
-                            else
-                            {
-                                MessageBox.Show("Lecture not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                ClearInputFields();
-                                selectedLectureId = -1;
-                            }
-                        }
-                    }
+                    selectedLectureId = lecture.Lec_ID;
+                    Lecname.Text = lecture.Lec_Name;
+                    LecPhone.Text = lecture.Lec_Phone;
+                    LecAddress.Text = lecture.Lec_Address;
+                    // Store User_ID somewhere if needed for other operations
                 }
+                else
+                {
+                    MessageBox.Show("Lecture not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearInputFields();
+                    selectedLectureId = -1;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please enter a lecture name to search.", "Input Needed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
         }

@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Data.SQLite;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using UnicomTICManagementSystem.Data;
+using UnicomTICManagementSystem.Controllers;
+using UnicomTICManagementSystem.Models;
 
 namespace UnicomTICManagementSystem
 {
@@ -16,145 +12,90 @@ namespace UnicomTICManagementSystem
     {
         private readonly string userRole;
         private readonly int userId;
+        private readonly StudentTimeTableController controller = new StudentTimeTableController();
+
         public StudentTimetableForm(int loggedUserId, string role)
         {
             InitializeComponent();
-            StdTicomboBox.SelectedIndexChanged += StdTicomboBox_SelectedIndexChanged;
-
             userId = loggedUserId;
             userRole = role;
+
+            StdTicomboBox.SelectedIndexChanged += StdTicomboBox_SelectedIndexChanged;
         }
 
         private void StudentTimetableForm_Load(object sender, EventArgs e)
         {
             if (userRole == "Student")
             {
-                // Hide manual search controls
                 StdTiSearch.Enabled = false;
                 StdTiSearch.Visible = false;
                 StdTiSearchBtn.Visible = false;
+                label1.Visible = false;
 
-                // Load current student's timetable
                 LoadStudentDetailsByUserId(userId);
-            }
-
-        }
-
-        private void LoadStudentDetailsByUserId(int uid)
-        {
-            using (var conn = Dbconfig.GetConnection())
-            {
-                string query = @"
-            SELECT s.StdId, s.StdName, s.StdPhone, s.StdAddress, c.CouId, c.CouName
-            FROM Students s
-            JOIN Marks m ON s.StdId = m.StdId
-            JOIN Courses c ON m.CourseId = c.CouId
-            WHERE s.UserId = @UserId
-            LIMIT 1;
-        ";
-
-                using (var cmd = new SQLiteCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@UserId", uid);
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            StdTiName.Text = reader["StdName"].ToString();
-                            StdTiPhone.Text = reader["StdPhone"].ToString();
-                            StdTiAddress.Text = reader["StdAddress"].ToString();
-                            StdTiCourse.Text = reader["CouName"].ToString();
-
-                            int courseId = Convert.ToInt32(reader["CouId"]);
-                            LoadSubjectsForCourse(courseId);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Student record not found.");
-                        }
-                    }
-                }
             }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (userRole == "Student")
-            {
-                MessageBox.Show("Access denied. Students can only view their own timetable.");
-                return;
-            }
-
-            string studentIdText = StdTiSearch.Text.Trim();
-            if (!int.TryParse(studentIdText, out int studentId))
+            if (!int.TryParse(StdTiSearch.Text.Trim(), out int studentId))
             {
                 MessageBox.Show("Please enter a valid numeric Student ID.");
                 return;
             }
 
-            using (var conn = Dbconfig.GetConnection())
+            var result = controller.GetStudentDetailsByStudentId(studentId);
+            if (result != null)
             {
-                string studentQuery = @"
-            SELECT s.StdName, s.StdPhone, s.StdAddress, c.CouId, c.CouName
-            FROM Students s
-            JOIN Marks m ON s.StdId = m.StdId
-            JOIN Courses c ON m.CourseId = c.CouId
-            WHERE s.StdId = @StdId
-            LIMIT 1;
-        ";
+                var (courseId, stdName, phone, address, courseName) = result.Value;
 
-                using (var cmd = new SQLiteCommand(studentQuery, conn))
-                {
-                    cmd.Parameters.AddWithValue("@StdId", studentId);
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            StdTiName.Text = reader["StdName"].ToString();
-                            StdTiPhone.Text = reader["StdPhone"].ToString();
-                            StdTiAddress.Text = reader["StdAddress"].ToString();
-                            StdTiCourse.Text = reader["CouName"].ToString();
+                StdTiName.Text = stdName;
+                StdTiPhone.Text = phone;
+                StdTiAddress.Text = address;
+                StdTiCourse.Text = courseName;
 
-                            int courseId = Convert.ToInt32(reader["CouId"]);
-                            LoadSubjectsForCourse(courseId);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Student not found.");
-                        }
-                    }
-                }
+                LoadSubjectsForCourse(courseId);
+            }
+            else
+            {
+                MessageBox.Show("Student not found.");
+            }
+        }
+
+        private void LoadStudentDetailsByUserId(int uid)
+        {
+            var result = controller.GetStudentDetailsByUserId(uid);
+            if (result != null)
+            {
+                var (courseId, stdName, phone, address, courseName) = result.Value;
+
+                StdTiName.Text = stdName;
+                StdTiPhone.Text = phone;
+                StdTiAddress.Text = address;
+                StdTiCourse.Text = courseName;
+
+                LoadSubjectsForCourse(courseId);
+            }
+            else
+            {
+                MessageBox.Show("Student record not found.");
             }
         }
 
         private void LoadSubjectsForCourse(int courseId)
         {
             StdTicomboBox.Items.Clear();
+            var subjectList = controller.GetSubjectsForCourse(courseId);
 
-            using (var conn = Dbconfig.GetConnection())
+            foreach (var subject in subjectList)
             {
-                
-                string query = "SELECT SubjectId, SubjectName FROM Subjects WHERE CourseId = @CourseId";
-
-                using (var cmd = new SQLiteCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@CourseId", courseId);
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        var subjectList = new List<Tuple<int, string>>();
-                        while (reader.Read())
-                        {
-                            int id = reader.GetInt32(0);
-                            string name = reader.GetString(1);
-                            subjectList.Add(Tuple.Create(id, name));
-                            StdTicomboBox.Items.Add(name); // Show name
-                        }
-
-                        // Store subject list in ComboBox Tag for later lookup
-                        StdTicomboBox.Tag = subjectList;
-                    }
-                }
+                StdTicomboBox.Items.Add(subject.Item2); // Show subject name
             }
+
+            StdTicomboBox.Tag = subjectList;
+
+            if (StdTicomboBox.Items.Count > 0)
+                StdTicomboBox.SelectedIndex = 0;
         }
 
         private void StdTicomboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -169,33 +110,15 @@ namespace UnicomTICManagementSystem
             if (selectedSubject == null) return;
 
             int subjectId = selectedSubject.Item1;
+            var timetable = controller.GetTimeTableBySubjectId(subjectId);
 
-            using (var conn = Dbconfig.GetConnection())
+            StdTidataGridView.DataSource = timetable;
+
+            if (StdTidataGridView.Columns.Count >= 3)
             {
-                
-
-                string query = @"
-            SELECT tt.TimeDay, tt.TimeSlot, r.RooomName
-            FROM TimeTables tt
-            JOIN Rooms r ON tt.RoomId = r.RoomId
-            WHERE tt.SubID = @SubId
-        ";
-
-                using (var cmd = new SQLiteCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@SubId", subjectId);
-                    using (var adapter = new SQLiteDataAdapter(cmd))
-                    {
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-                        StdTidataGridView.DataSource = dt;
-
-                        // Optionally set column headers
-                        StdTidataGridView.Columns["TimeDay"].HeaderText = "Day";
-                        StdTidataGridView.Columns["TimeSlot"].HeaderText = "Time Slot";
-                        StdTidataGridView.Columns["RooomName"].HeaderText = "Room";
-                    }
-                }
+                StdTidataGridView.Columns["TimeDay"].HeaderText = "Day";
+                StdTidataGridView.Columns["TimeSlot"].HeaderText = "Time Slot";
+                StdTidataGridView.Columns["RoomName"].HeaderText = "Room";
             }
         }
     }

@@ -59,25 +59,30 @@ namespace UnicomTICManagementSystem.Controllers
             }
         }
 
-        //public List<AddClass> GetAllClasses()
-        //{
-        //    var classes = new List<AddClass>();
-        //    using (var conn = Dbconfig.GetConnection())
-        //    {
-        //        var cmd = new SQLiteCommand("SELECT * FROM AddClasses", conn);
-        //        var reader = cmd.ExecuteReader();
-        //        while (reader.Read())
-        //        {
-        //            classes.Add(new AddClass
-        //            {
-        //                AddClassID = reader.GetInt32(0),
-        //                AddClassCode = reader.GetString(1),
-        //                AddClassName = reader.GetString(2)
-        //            });
-        //        }
-        //    }
-        //    return classes;
-        //}
+        public AddClass SearchClassByName(string className)
+        {
+            string query = "SELECT * FROM AddClasses WHERE ClName = @ClName LIMIT 1";
+            using (var conn = Dbconfig.GetConnection())
+            using (var cmd = new SQLiteCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@ClName", className);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new AddClass
+                        {
+                            AddClassID = Convert.ToInt32(reader["ClId"]),
+                            AddClassCode = reader["ClMode"].ToString(),  // ClMode
+                            AddClassName = reader["ClName"].ToString()   // ClName
+                        };
+                    }
+                }
+            }
+            return null;
+        }
+
+
 
         public List<AddClass> GetClassNamesAndModes()   // Added new method to get class names and modes
         {
