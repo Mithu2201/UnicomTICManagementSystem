@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UnicomTICManagementSystem.Views;
 
 namespace UnicomTICManagementSystem
 {
@@ -85,6 +86,15 @@ namespace UnicomTICManagementSystem
             label5.Font = new Font(label5.Font, FontStyle.Underline);
 
             this.Hide();
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+            ResetAllLabels();
+            label2.ForeColor = Color.Blue;
+            label2.Font = new Font(label2.Font, FontStyle.Underline);
+
+            loadform(new CourseRegisterForm());
         }
     }
 }

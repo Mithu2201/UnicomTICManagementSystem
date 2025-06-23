@@ -92,29 +92,28 @@ namespace UnicomTICManagementSystem.Controllers
 
         public DataTable GetAttendanceRecords(int studentId, int subjectId, string date)
         {
+            var dt = new DataTable();
+
             using (var conn = Dbconfig.GetConnection())
             {
                 string query = @"
-                    SELECT Date, 
-                           (SELECT SubjectName FROM Subjects WHERE SubjectId = a.SubjectId) AS Subject,
-                           (SELECT StatusName FROM AddStatus WHERE StatusId = a.StatusId) AS Status
-                    FROM Attendances a
-                    WHERE a.StdId = @StdId AND a.SubjectId = @SubId AND a.Date = @Date";
+            SELECT a.Date, s.StatusName, sub.SubjectName
+            FROM Attendances a
+            JOIN AddStatus s ON a.StatusId = s.StatusId
+            JOIN Subjects sub ON a.SubjectId = sub.SubjectId
+            WHERE a.StdId = @studentId AND a.SubjectId = @subjectId AND a.Date = @date";
 
                 using (var cmd = new SQLiteCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@StdId", studentId);
-                    cmd.Parameters.AddWithValue("@SubId", subjectId);
-                    cmd.Parameters.AddWithValue("@Date", date);
+                    cmd.Parameters.AddWithValue("@studentId", studentId);
+                    cmd.Parameters.AddWithValue("@subjectId", subjectId);
+                    cmd.Parameters.AddWithValue("@date", date);
 
-                    using (var adapter = new SQLiteDataAdapter(cmd))
-                    {
-                        var dt = new DataTable();
-                        adapter.Fill(dt);
-                        return dt;
-                    }
+                    dt.Load(cmd.ExecuteReader());
                 }
             }
+
+            return dt;
         }
     }
 }

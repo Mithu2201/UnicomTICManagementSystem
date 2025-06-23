@@ -170,6 +170,73 @@ namespace UnicomTICManagementSystem.Controllers
             return list;
         }
 
+        public void RecordLoginAttendance(int studentId)
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                string formattedDate = DateTime.Now.ToString("dddd, MMMM dd, yyyy");
+
+                // Avoid duplicate for the day
+                string checkQuery = @"SELECT COUNT(*) FROM Attendances 
+                              WHERE StdId = @StdId AND Date = @Date";
+                var checkCmd = new SQLiteCommand(checkQuery, conn);
+                checkCmd.Parameters.AddWithValue("@StdId", studentId);
+                checkCmd.Parameters.AddWithValue("@Date", formattedDate);
+
+                long exists = (long)checkCmd.ExecuteScalar();
+                if (exists > 0)
+                    return; // Already marked
+
+                // ✅ Get subject assigned to the student (via course mapping)
+                int subjectId = GetAssignedSubjectIdForStudent(studentId, conn);
+                int statusId = GetStatusIdByName("Present", conn);
+
+                if (subjectId > 0 && statusId > 0)
+                {
+                    var insertCmd = new SQLiteCommand(@"INSERT INTO Attendances (Date, StatusId, SubjectId, StdId)
+                                                VALUES (@Date, @StatusId, @SubjectId, @StdId)", conn);
+                    insertCmd.Parameters.AddWithValue("@Date", formattedDate);
+                    insertCmd.Parameters.AddWithValue("@StatusId", statusId);
+                    insertCmd.Parameters.AddWithValue("@SubjectId", subjectId);
+                    insertCmd.Parameters.AddWithValue("@StdId", studentId);
+                    insertCmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private int GetStatusIdByName(string statusName, SQLiteConnection conn)
+        {
+            var cmd = new SQLiteCommand("SELECT StatusId FROM AddStatus WHERE StatusName = @name", conn);
+            cmd.Parameters.AddWithValue("@name", statusName);
+            var result = cmd.ExecuteScalar();
+            return result != null ? Convert.ToInt32(result) : -1;
+        }
+
+        private int GetDefaultSubjectId(int studentId, SQLiteConnection conn)
+        {
+            var cmd = new SQLiteCommand("SELECT SubjectId FROM Subjects LIMIT 1", conn);
+            var result = cmd.ExecuteScalar();
+            return result != null ? Convert.ToInt32(result) : -1;
+        }
+
+        private int GetAssignedSubjectIdForStudent(int studentId, SQLiteConnection conn)
+        {
+            string query = @"
+        SELECT sub.SubjectId
+        FROM StudentCourses sc
+        JOIN Subjects sub ON sc.CourseId = sub.CourseId
+        WHERE sc.StudentId = @studentId
+        LIMIT 1";
+
+            using (var cmd = new SQLiteCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@studentId", studentId);
+                var result = cmd.ExecuteScalar();
+                return result != null ? Convert.ToInt32(result) : -1;
+            }
+        }
+
+
     }
 
 

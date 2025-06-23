@@ -130,7 +130,7 @@ namespace UnicomTICManagementSystem
                 }
             }
 
-            string selectedDateString = StdAtdateTimePicker.Value.ToString("D");
+            string selectedDateString = StdAtdateTimePicker.Value.ToString("dddd, MMMM dd, yyyy");
 
             DataTable attendanceData = _controller.GetAttendanceRecords(studentId, subjectId, selectedDateString);
             StdAtdataGridView.DataSource = attendanceData;

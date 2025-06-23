@@ -48,10 +48,11 @@
             // StdTidataGridView
             // 
             this.StdTidataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.StdTidataGridView.Location = new System.Drawing.Point(120, 155);
+            this.StdTidataGridView.Location = new System.Drawing.Point(69, 157);
             this.StdTidataGridView.Name = "StdTidataGridView";
-            this.StdTidataGridView.Size = new System.Drawing.Size(472, 111);
+            this.StdTidataGridView.Size = new System.Drawing.Size(512, 111);
             this.StdTidataGridView.TabIndex = 28;
+            this.StdTidataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.StdTidataGridView_CellContentClick);
             // 
             // StdTicomboBox
             // 

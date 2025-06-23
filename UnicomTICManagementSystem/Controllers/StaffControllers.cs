@@ -47,11 +47,11 @@ namespace UnicomTICManagementSystem.Controllers
 
                     if (rowsAffected > 0)
                     {
-                        MessageBox.Show("Student updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Staff updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
-                        MessageBox.Show("Student not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Staff not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
@@ -70,11 +70,11 @@ namespace UnicomTICManagementSystem.Controllers
 
                     if (rowsAffected > 0)
                     {
-                        MessageBox.Show("Student deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Staff deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
-                        MessageBox.Show("Student not found.", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Staff not found.", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
             }

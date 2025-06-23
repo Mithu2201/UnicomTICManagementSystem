@@ -31,6 +31,7 @@ namespace UnicomTICManagementSystem
             MarkdataGridView.SelectionChanged += MarkdataGridView_SelectionChanged;
             this.Load += MarksForm_Load;
             MarkScore.TextChanged += MarkScore_TextChanged;
+            CoursecomboBox.SelectedIndexChanged += CoursecomboBox_SelectedIndexChanged;
             LoadCourses();
             LoadSubjects();
 
@@ -85,6 +86,15 @@ namespace UnicomTICManagementSystem
         {
             var marks = markController.GetAllMarks();
             MarkdataGridView.DataSource = marks;
+
+            if (MarkdataGridView.Columns.Contains("StdID"))
+                MarkdataGridView.Columns["StdID"].Visible = false;
+
+            if (MarkdataGridView.Columns.Contains("CourseId"))
+                MarkdataGridView.Columns["CourseId"].Visible = false;
+
+            if (MarkdataGridView.Columns.Contains("SubjectId"))
+                MarkdataGridView.Columns["SubjectId"].Visible = false;
         }
 
 
@@ -250,10 +260,64 @@ namespace UnicomTICManagementSystem
             }
         }
 
+        private void CoursecomboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (CoursecomboBox.SelectedValue != null && int.TryParse(CoursecomboBox.SelectedValue.ToString(), out int selectedCourseId))
+            {
+                LoadSubjectsByCourse(selectedCourseId);
+                LoadStudentsByCourse(selectedCourseId);
+            }
+        }
+
+        private void LoadSubjectsByCourse(int courseId)
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                string query = "SELECT SubjectId, SubjectName FROM Subjects WHERE CourseId = @CourseId";
+                using (var cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@CourseId", courseId);
+                    using (var adapter = new SQLiteDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        SelectcomboBox.DataSource = dt;
+                        SelectcomboBox.DisplayMember = "SubjectName";
+                        SelectcomboBox.ValueMember = "SubjectId";
+                    }
+                }
+            }
+        }
+
+        private void LoadStudentsByCourse(int courseId)
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                string query = @"
+            SELECT s.StdId, s.StdName
+            FROM Students s
+            JOIN StudentCourses sc ON s.StdId = sc.StudentId
+            WHERE sc.CourseId = @CourseId";
+
+                using (var cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@CourseId", courseId);
+                    using (var adapter = new SQLiteDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        MarkcomboBox.DataSource = dt;
+                        MarkcomboBox.DisplayMember = "StdName";
+                        MarkcomboBox.ValueMember = "StdId";
+                    }
+                }
+            }
+        }
+
+
         private string GetGradeFromScore(int score)
         {
-            if (score >= 90 && score <= 100) return "A+";
-            else if (score >= 80 && score <= 89) return "A";
+            if (score >= 80 && score <= 100) return "A";
             else if (score >= 70 && score <= 79) return "B";
             else if (score >= 60 && score <= 69) return "C";
             else if (score >= 50 && score <= 59) return "D";

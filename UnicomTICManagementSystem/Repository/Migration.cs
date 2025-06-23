@@ -74,7 +74,7 @@ namespace UnicomTICManagementSystem.Repository
                         SubjectCode TEXT NOT NULL,
                         SubjectName TEXT NOT NULL,
                         CourseId INTEGER NOT NULL,
-                        FOREIGN KEY (CourseId) REFERENCES Courses(CourseId)
+                        FOREIGN KEY (CourseId) REFERENCES Courses(CouId)
                         
                     );
 
@@ -104,6 +104,14 @@ namespace UnicomTICManagementSystem.Repository
                         UserId INTEGER,
                         FOREIGN KEY (UserId) REFERENCES Users(UserId)
                     );
+
+                        CREATE TABLE IF NOT EXISTS StudentCourses (
+                        SCId INTEGER PRIMARY KEY AUTOINCREMENT,
+                        StudentId INTEGER NOT NULL,
+                        CourseId INTEGER NOT NULL,
+                        FOREIGN KEY (StudentId) REFERENCES Students(StdId),
+                        FOREIGN KEY (CourseId) REFERENCES Courses(CouId)
+                    );
                         
                         CREATE TABLE IF NOT EXISTS Classes (
                         ClassId INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -130,7 +138,7 @@ namespace UnicomTICManagementSystem.Repository
                         RoomMode TEXT NOT NULL,
                         ExamID INTEGER NULL,
                         ClassId INTEGER NULL,
-                        FOREIGN KEY (ClassId) REFERENCES Classes(ClassId)
+                        FOREIGN KEY (ClassId) REFERENCES Classes(ClassId),
                         FOREIGN KEY (ExamID) REFERENCES Exams(ExamID)
                         
                     );
@@ -179,7 +187,7 @@ namespace UnicomTICManagementSystem.Repository
                         WHERE NOT EXISTS (SELECT 1 FROM Roles WHERE RoleName = 'Admin');
 
                         INSERT INTO Users (UserName, UserPass, UserRole)
-                        SELECT 'Admin', 'Admin@123', 'Admin'
+                        SELECT 'Admin', '123', 'Admin'
                         WHERE NOT EXISTS (SELECT 1 FROM Users WHERE UserName = 'Admin');
 
                         INSERT INTO Staffs (StaffName, StaffPhone, StaffAddress, UserId)
@@ -189,7 +197,20 @@ namespace UnicomTICManagementSystem.Repository
                         AND NOT EXISTS (
                         SELECT 1 FROM Staffs
                         WHERE UserId = (SELECT UserId FROM Users WHERE UserName = 'Admin')
+
                     );
+
+                         INSERT INTO AddStatus (StatusName)
+                        SELECT 'Present'
+                        WHERE NOT EXISTS (SELECT 1 FROM AddStatus WHERE StatusName = 'Present');
+
+                        INSERT INTO AddStatus (StatusName)
+                        SELECT 'Absent'
+                        WHERE NOT EXISTS (SELECT 1 FROM AddStatus WHERE StatusName = 'Absent');
+
+                        INSERT INTO AddStatus (StatusName)
+                        SELECT 'Late'
+                        WHERE NOT EXISTS (SELECT 1 FROM AddStatus WHERE StatusName = 'Late');
                 ";
 
                 cmd.ExecuteNonQuery();

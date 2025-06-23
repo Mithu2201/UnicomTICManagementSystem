@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.TidateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.button1 = new System.Windows.Forms.Button();
             this.TidataGridView = new System.Windows.Forms.DataGridView();
             this.TiSlot = new System.Windows.Forms.TextBox();
@@ -37,100 +38,98 @@
             this.Sdelete = new System.Windows.Forms.Button();
             this.Sedit = new System.Windows.Forms.Button();
             this.Sadd = new System.Windows.Forms.Button();
-            this.TidateTimePicker = new System.Windows.Forms.DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)(this.TidataGridView)).BeginInit();
             this.SuspendLayout();
             // 
+            // TidateTimePicker
+            // 
+            this.TidateTimePicker.Location = new System.Drawing.Point(232, 6);
+            this.TidateTimePicker.Name = "TidateTimePicker";
+            this.TidateTimePicker.Size = new System.Drawing.Size(304, 20);
+            this.TidateTimePicker.TabIndex = 58;
+            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(470, 109);
+            this.button1.Location = new System.Drawing.Point(461, 112);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 47;
+            this.button1.TabIndex = 57;
             this.button1.Text = "Clear";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // TidataGridView
             // 
             this.TidataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.TidataGridView.Location = new System.Drawing.Point(173, 155);
+            this.TidataGridView.Location = new System.Drawing.Point(164, 158);
             this.TidataGridView.Name = "TidataGridView";
             this.TidataGridView.Size = new System.Drawing.Size(323, 133);
-            this.TidataGridView.TabIndex = 46;
-            this.TidataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.TidataGridView_CellContentClick);
+            this.TidataGridView.TabIndex = 56;
             // 
             // TiSlot
             // 
-            this.TiSlot.Location = new System.Drawing.Point(241, 47);
+            this.TiSlot.Location = new System.Drawing.Point(232, 50);
             this.TiSlot.Name = "TiSlot";
             this.TiSlot.Size = new System.Drawing.Size(304, 20);
-            this.TiSlot.TabIndex = 45;
+            this.TiSlot.TabIndex = 55;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(127, 54);
+            this.label3.Location = new System.Drawing.Point(118, 57);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(64, 13);
-            this.label3.TabIndex = 43;
+            this.label3.TabIndex = 54;
             this.label3.Text = "TIME SLOT";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(127, 6);
+            this.label2.Location = new System.Drawing.Point(118, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(64, 13);
-            this.label2.TabIndex = 42;
+            this.label2.TabIndex = 53;
             this.label2.Text = "DAY_DATE";
             // 
             // Ssearch
             // 
-            this.Ssearch.Location = new System.Drawing.Point(123, 109);
+            this.Ssearch.Location = new System.Drawing.Point(114, 112);
             this.Ssearch.Name = "Ssearch";
             this.Ssearch.Size = new System.Drawing.Size(75, 23);
-            this.Ssearch.TabIndex = 41;
+            this.Ssearch.TabIndex = 52;
             this.Ssearch.Text = "Search";
             this.Ssearch.UseVisualStyleBackColor = true;
-            this.Ssearch.Click += new System.EventHandler(this.Ssearch_Click);
+            this.Ssearch.Click += new System.EventHandler(this.Ssearch_Click_1);
             // 
             // Sdelete
             // 
-            this.Sdelete.Location = new System.Drawing.Point(218, 109);
+            this.Sdelete.Location = new System.Drawing.Point(209, 112);
             this.Sdelete.Name = "Sdelete";
             this.Sdelete.Size = new System.Drawing.Size(75, 23);
-            this.Sdelete.TabIndex = 40;
+            this.Sdelete.TabIndex = 51;
             this.Sdelete.Text = "Delete";
             this.Sdelete.UseVisualStyleBackColor = true;
-            this.Sdelete.Click += new System.EventHandler(this.Sdelete_Click);
+            this.Sdelete.Click += new System.EventHandler(this.Sdelete_Click_1);
             // 
             // Sedit
             // 
-            this.Sedit.Location = new System.Drawing.Point(299, 109);
+            this.Sedit.Location = new System.Drawing.Point(290, 112);
             this.Sedit.Name = "Sedit";
             this.Sedit.Size = new System.Drawing.Size(75, 23);
-            this.Sedit.TabIndex = 39;
+            this.Sedit.TabIndex = 50;
             this.Sedit.Text = "Edit";
             this.Sedit.UseVisualStyleBackColor = true;
-            this.Sedit.Click += new System.EventHandler(this.Sedit_Click);
+            this.Sedit.Click += new System.EventHandler(this.Sedit_Click_1);
             // 
             // Sadd
             // 
-            this.Sadd.Location = new System.Drawing.Point(389, 109);
+            this.Sadd.Location = new System.Drawing.Point(380, 112);
             this.Sadd.Name = "Sadd";
             this.Sadd.Size = new System.Drawing.Size(75, 23);
-            this.Sadd.TabIndex = 38;
+            this.Sadd.TabIndex = 49;
             this.Sadd.Text = "Add";
             this.Sadd.UseVisualStyleBackColor = true;
-            this.Sadd.Click += new System.EventHandler(this.Sadd_Click);
-            // 
-            // TidateTimePicker
-            // 
-            this.TidateTimePicker.Location = new System.Drawing.Point(241, 3);
-            this.TidateTimePicker.Name = "TidateTimePicker";
-            this.TidateTimePicker.Size = new System.Drawing.Size(304, 20);
-            this.TidateTimePicker.TabIndex = 48;
+            this.Sadd.Click += new System.EventHandler(this.Sadd_Click_1);
             // 
             // AddTimeForm
             // 
@@ -159,6 +158,7 @@
 
         #endregion
 
+        private System.Windows.Forms.DateTimePicker TidateTimePicker;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView TidataGridView;
         private System.Windows.Forms.TextBox TiSlot;
@@ -168,6 +168,5 @@
         private System.Windows.Forms.Button Sdelete;
         private System.Windows.Forms.Button Sedit;
         private System.Windows.Forms.Button Sadd;
-        private System.Windows.Forms.DateTimePicker TidateTimePicker;
     }
 }

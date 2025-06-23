@@ -32,6 +32,21 @@ namespace UnicomTICManagementSystem
             {
                 MessageBox.Show($"Welcome {user.FullName}!\n{user.UserRole}");
 
+                if (user.UserRole == UserRole.Student)
+                {
+                    StudentController studentCtrl = new StudentController();
+                    var student = studentCtrl.SearchStudentByUserId(user.UserId); // Add this method
+
+                    if (student != null)
+                    {
+                        var attendController = new AttendController();
+                        attendController.RecordLoginAttendance(student.Std_ID);
+
+                        MessageBox.Show("Your attendance is marked as 'Present'.");
+                    }
+                }
+
+
                 MainMenuForm mainMenu = new MainMenuForm(user.UserId, user.UserRole.ToString());
                 mainMenu.Show();
                 this.Hide();

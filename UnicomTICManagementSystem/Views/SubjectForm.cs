@@ -168,7 +168,7 @@ namespace UnicomTICManagementSystem
                 SubControll.DeleteSubject(selectSubjectId);
                 LoadSubject();
                 ClearForm();
-                MessageBox.Show("Student Deleted Successfully");
+                MessageBox.Show("Subject Deleted Successfully");
 
             }
         }

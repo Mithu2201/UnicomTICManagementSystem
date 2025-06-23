@@ -51,7 +51,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(415, 108);
+            this.button1.Location = new System.Drawing.Point(415, 122);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 36;
@@ -111,7 +111,7 @@
             // 
             // Ssearch
             // 
-            this.Ssearch.Location = new System.Drawing.Point(117, 108);
+            this.Ssearch.Location = new System.Drawing.Point(117, 122);
             this.Ssearch.Name = "Ssearch";
             this.Ssearch.Size = new System.Drawing.Size(75, 23);
             this.Ssearch.TabIndex = 29;
@@ -121,7 +121,7 @@
             // 
             // Sdelete
             // 
-            this.Sdelete.Location = new System.Drawing.Point(215, 108);
+            this.Sdelete.Location = new System.Drawing.Point(215, 122);
             this.Sdelete.Name = "Sdelete";
             this.Sdelete.Size = new System.Drawing.Size(75, 23);
             this.Sdelete.TabIndex = 28;
@@ -131,7 +131,7 @@
             // 
             // Sedit
             // 
-            this.Sedit.Location = new System.Drawing.Point(315, 108);
+            this.Sedit.Location = new System.Drawing.Point(315, 122);
             this.Sedit.Name = "Sedit";
             this.Sedit.Size = new System.Drawing.Size(75, 23);
             this.Sedit.TabIndex = 27;

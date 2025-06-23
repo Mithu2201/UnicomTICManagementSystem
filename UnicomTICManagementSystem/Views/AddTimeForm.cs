@@ -46,7 +46,7 @@ namespace UnicomTICManagementSystem
 
         private void ClearFields()
         {
-            
+
             TiSlot.Clear();
         }
 
@@ -61,35 +61,7 @@ namespace UnicomTICManagementSystem
             }
         }
 
-        private void Ssearch_Click(object sender, EventArgs e)
-        {
-            string searchDay = TidateTimePicker.Text.Trim();
-
-            if (!string.IsNullOrEmpty(searchDay))
-            {
-                var controller = new AddTimeController();
-                var result = controller.SearchAddTimeByDay(searchDay);
-
-                if (result != null)
-                {
-                    selectedTimeId = result.AddTimeID;
-                    TidateTimePicker.Text = result.AddTimeCode;
-                    TiSlot.Text = result.AddTimeName;
-                }
-                else
-                {
-                    MessageBox.Show("Time not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ClearFields();
-                    selectedTimeId = -1;
-                }
-            }
-            else
-            {
-                MessageBox.Show("Please enter a day to search.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        private void Sadd_Click(object sender, EventArgs e)
+        private void Sadd_Click_1(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(TidateTimePicker.Text) || string.IsNullOrWhiteSpace(TiSlot.Text))
             {
@@ -106,7 +78,7 @@ namespace UnicomTICManagementSystem
             ClearFields();
         }
 
-        private void Sedit_Click(object sender, EventArgs e)
+        private void Sedit_Click_1(object sender, EventArgs e)
         {
             if (selectedTimeId != -1)
             {
@@ -120,7 +92,7 @@ namespace UnicomTICManagementSystem
             }
         }
 
-        private void Sdelete_Click(object sender, EventArgs e)
+        private void Sdelete_Click_1(object sender, EventArgs e)
         {
             if (TidataGridView.SelectedRows.Count > 0)
             {
@@ -138,9 +110,40 @@ namespace UnicomTICManagementSystem
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button1_Click_1(object sender, EventArgs e)
         {
             ClearFields();
+        }
+
+        private void Ssearch_Click_1(object sender, EventArgs e)
+        {
+            string code = TidateTimePicker.Text.Trim();
+            if (!string.IsNullOrEmpty(code))
+            {
+                using (var conn = Dbconfig.GetConnection())
+                {
+                    string query = "SELECT * FROM AddTimes WHERE TiDay = @TiDay";
+                    using (var cmd = new SQLiteCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@TiDay", code);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                selectedTimeId = Convert.ToInt32(reader["TiId"]);
+                                TidateTimePicker.Text = reader["TiDay"].ToString();
+                                TiSlot.Text = reader["TiSlot"].ToString();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Time not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                ClearFields();
+                                selectedTimeId = -1;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

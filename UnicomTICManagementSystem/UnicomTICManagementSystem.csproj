@@ -53,9 +53,11 @@
   <ItemGroup>
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\StudentAttendanceController.cs" />
+    <Compile Include="Controllers\StudentCourseController.cs" />
     <Compile Include="Controllers\StudentMarkController.cs" />
     <Compile Include="Controllers\StudentTimeTableController.cs" />
     <Compile Include="Enums\UserRole.cs" />
+    <Compile Include="Models\StudentCourse.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\StudentAttendanceModel.cs" />
     <Compile Include="Models\StudentMarkModel.cs" />
@@ -137,6 +139,12 @@
     </Compile>
     <Compile Include="Views\CourseMenuForm.Designer.cs">
       <DependentUpon>CourseMenuForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CourseRegister.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\CourseRegister.Designer.cs">
+      <DependentUpon>CourseRegister.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\ExamForm.cs">
       <SubType>Form</SubType>
@@ -309,6 +317,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\CourseMenuForm.resx">
       <DependentUpon>CourseMenuForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\CourseRegister.resx">
+      <DependentUpon>CourseRegister.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ExamForm.resx">
       <DependentUpon>ExamForm.cs</DependentUpon>

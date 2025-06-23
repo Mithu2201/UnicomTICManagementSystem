@@ -35,6 +35,7 @@ namespace UnicomTICManagementSystem
 
             this.Load += TimeTablesForm_Load;
             TimedataGridView.SelectionChanged += TimedataGridView_SelectionChanged;
+            
 
             LoadTimetables();
             LoadCourses();
@@ -157,21 +158,27 @@ namespace UnicomTICManagementSystem
 
             using (var conn = Dbconfig.GetConnection())
             {
-                var checkCmd = new SQLiteCommand(@"
-                                        SELECT COUNT(*) FROM TimeTables
-                                        WHERE RoomId = @RoomId AND TimeDay = @TimeDay AND TimeSlot = @TimeSlot", conn);
+                string checkQuery = @"
+            SELECT COUNT(*) FROM TimeTables
+            WHERE 
+            (LecID = @LecID AND TimeDay = @TimeDay AND TimeSlot = @TimeSlot)
+            OR
+            (RoomId = @RoomId AND TimeDay = @TimeDay AND TimeSlot = @TimeSlot)";
 
-                
-                checkCmd.Parameters.AddWithValue("@RoomId", TimecomboBox.SelectedValue);
-                checkCmd.Parameters.AddWithValue("@TimeDay", TiDaycomboBox.Text.Trim());
-                checkCmd.Parameters.AddWithValue("@TimeSlot", TiSlotcomboBox.Text.Trim());
-
-                var count = Convert.ToInt32(checkCmd.ExecuteScalar());
-
-                if (count > 0)
+                using (var cmd = new SQLiteCommand(checkQuery, conn))
                 {
-                    MessageBox.Show("A timetable entry for this Lecture in the same Room, Day, and Time Slot already exists!", "Duplicate Entry", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return; // Stop insertion
+                    cmd.Parameters.AddWithValue("@LecID", LecturecomboBox.SelectedValue);
+                    cmd.Parameters.AddWithValue("@RoomId", TimecomboBox.SelectedValue);
+                    cmd.Parameters.AddWithValue("@TimeDay", TiDaycomboBox.Text.Trim());
+                    cmd.Parameters.AddWithValue("@TimeSlot", TiSlotcomboBox.Text.Trim());
+
+                    int conflictCount = Convert.ToInt32(cmd.ExecuteScalar());
+
+                    if (conflictCount > 0)
+                    {
+                        MessageBox.Show("Conflict: Either the room or lecturer is already assigned for the same day and time slot.", "Conflict Detected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
                 }
             }
 
@@ -246,22 +253,41 @@ namespace UnicomTICManagementSystem
 
             if (!string.IsNullOrEmpty(searchSubject))
             {
-                var timetable = TimeControll.SearchTimetableBySubjectName(searchSubject);
-                if (timetable != null)
+                using (var conn = Dbconfig.GetConnection())
                 {
-                    selectedTimeId = timetable.TiID;
+                    string query = @"
+                SELECT t.TimeId, t.TimeDay, t.TimeSlot, t.RoomId, r.RooomName, s.SubjectId, s.SubjectName
+                FROM TimeTables t
+                LEFT JOIN Rooms r ON t.RoomId = r.RoomId
+                LEFT JOIN Subjects s ON t.SubID = s.SubjectId
+                WHERE s.SubjectName LIKE @SubjectName
+                LIMIT 1";
 
-                    TiDaycomboBox.Text = timetable.Tiday;
-                    TiSlotcomboBox.Text = timetable.Tislot;
-                    TimecomboBox.SelectedValue = timetable.RoID;
-                    CoursecomboBox.SelectedValue = timetable.CourseID;
-                    SelectcomboBox.SelectedValue = timetable.SubID;
-                    LecturecomboBox.SelectedValue = timetable.LecID;
-                }
-                else
-                {
-                    MessageBox.Show("Timetable for the selected subject not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ClearForm();
+                    using (var cmd = new SQLiteCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@SubjectName", $"%{searchSubject}%");
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                selectedTimeId = Convert.ToInt32(reader["TimeId"]);
+                                TiDaycomboBox.Text = reader["TimeDay"].ToString();
+                                TiSlotcomboBox.Text = reader["TimeSlot"].ToString();
+
+                                int roomId = Convert.ToInt32(reader["RoomId"]);
+                                TimecomboBox.SelectedValue = roomId;
+
+                                int subjectId = Convert.ToInt32(reader["SubjectId"]);
+                                SelectcomboBox.SelectedValue = subjectId;
+                            }
+                            else
+                            {
+                                MessageBox.Show("Timetable for the selected subject not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                ClearForm();
+                            }
+                        }
+                    }
                 }
             }
             else
@@ -291,6 +317,8 @@ namespace UnicomTICManagementSystem
                 }
             }
         }
+
+        
 
         private void LoadTimeComboBoxes()
         {

@@ -21,6 +21,7 @@ namespace UnicomTICManagementSystem.Controllers
                 command.Parameters.AddWithValue("@SubjectName", Sub.Subname);
                 command.Parameters.AddWithValue("@CourseID", Sub.CourseID);
                 command.ExecuteNonQuery();
+
             }
         }
 

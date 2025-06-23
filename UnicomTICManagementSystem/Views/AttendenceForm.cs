@@ -23,9 +23,12 @@ namespace UnicomTICManagementSystem
         private readonly SubjectControllers subjectController;
 
         private int selectedAttendId = -1;
-        public AttendenceForm()
+
+        private int? loggedInStudentId = null;
+        public AttendenceForm(int? studentId = null)
         {
             InitializeComponent();
+            loggedInStudentId = studentId;
             StudentControll = new StudentController();
             AddStatusControll = new AddStatusController();
             subjectController = new SubjectControllers();
@@ -43,14 +46,28 @@ namespace UnicomTICManagementSystem
 
         private void LoadAttendtables()
         {
-            AttenddataGridView.DataSource = null;
-            AttenddataGridView.DataSource = attendControll.GetAllStatusAll();
+            if (loggedInStudentId.HasValue)
+            {
+                // Only load attendance for logged-in student
+                AttenddataGridView.DataSource = attendControll
+                    .GetAllStatusAll()
+                    .Where(a => a.StudentID == loggedInStudentId.Value)
+                    .ToList();
+            }
+            else
+            {
+                
+                AttenddataGridView.DataSource = attendControll.GetAllStatusAll();
+            }
 
+            
+            if (AttenddataGridView.Columns.Contains("AttendID"))
+                AttenddataGridView.Columns["AttendID"].Visible = false;
             if (AttenddataGridView.Columns.Contains("StatusID"))
                 AttenddataGridView.Columns["StatusID"].Visible = false;
-                AttenddataGridView.Columns["AttendID"].Visible = false;
-                AttenddataGridView.Columns["StatusID"].Visible = false;
+            if (AttenddataGridView.Columns.Contains("SubID"))
                 AttenddataGridView.Columns["SubID"].Visible = false;
+            if (AttenddataGridView.Columns.Contains("StudentID"))
                 AttenddataGridView.Columns["StudentID"].Visible = false;
 
             AttenddataGridView.ClearSelection();
