@@ -18,7 +18,7 @@ namespace UnicomTICManagementSystem.Controllers
 
             using (var conn = Dbconfig.GetConnection())
             {
-                // Check if the username already exists
+                
                 string checkQuery = "SELECT COUNT(*) FROM Users WHERE UserName = @UserName";
                 using (var checkCmd = new SQLiteCommand(checkQuery, conn))
                 {
@@ -31,7 +31,7 @@ namespace UnicomTICManagementSystem.Controllers
                     }
                 }
 
-                // If not exists, insert new user
+                
                 string insertQuery = "INSERT INTO Users (UserName, UserPass, UserRole) VALUES (@UserName, @UserPass, @UserRole)";
                 using (var cmd = new SQLiteCommand(insertQuery, conn))
                 {
@@ -124,7 +124,7 @@ namespace UnicomTICManagementSystem.Controllers
                     }
                 }
             }
-            return null; // Not found
+            return null; 
         }
 
     }

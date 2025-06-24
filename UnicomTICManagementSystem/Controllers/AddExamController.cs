@@ -106,8 +106,8 @@ namespace UnicomTICManagementSystem.Controllers
                 {
                     examList.Add(new AddExam
                     {
-                        AddExamCode = reader.GetString(0), // ExName
-                        AddExamName = reader.GetString(1)  // ExType
+                        AddExamCode = reader.GetString(0), 
+                        AddExamName = reader.GetString(1)  
                     });
                 }
             }

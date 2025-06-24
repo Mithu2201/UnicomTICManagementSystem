@@ -50,7 +50,7 @@ namespace UnicomTICManagementSystem
 
         private void label6_Click(object sender, EventArgs e)
         {
-            ResetAllLabels(); // Reset others
+            ResetAllLabels(); 
             label6.ForeColor = Color.Blue;
             label6.Font = new Font(label6.Font, FontStyle.Underline);
 
@@ -105,7 +105,7 @@ namespace UnicomTICManagementSystem
         private void label5_Click(object sender, EventArgs e)
         {
             ResetAllLabels();
-            label5.ForeColor = Color.Red; // Optional: show red for exit
+            label5.ForeColor = Color.Red; 
             label5.Font = new Font(label5.Font, FontStyle.Underline);
 
             this.Hide();

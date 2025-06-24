@@ -16,6 +16,9 @@ namespace UnicomTICManagementSystem
 {
     public partial class AddTimeForm : Form
     {
+        private AddTimeController controller = new AddTimeController();
+        private int selectedAddTimeId = -1;
+
         private int selectedTimeId = -1;
         public AddTimeForm()
         {
@@ -117,31 +120,21 @@ namespace UnicomTICManagementSystem
 
         private void Ssearch_Click_1(object sender, EventArgs e)
         {
-            string code = TidateTimePicker.Text.Trim();
+            string code = TidateTimePicker.Text.Trim(); 
             if (!string.IsNullOrEmpty(code))
             {
-                using (var conn = Dbconfig.GetConnection())
+                var result = controller.SearchAddTimeByCode(code);
+                if (result != null)
                 {
-                    string query = "SELECT * FROM AddTimes WHERE TiDay = @TiDay";
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@TiDay", code);
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                selectedTimeId = Convert.ToInt32(reader["TiId"]);
-                                TidateTimePicker.Text = reader["TiDay"].ToString();
-                                TiSlot.Text = reader["TiSlot"].ToString();
-                            }
-                            else
-                            {
-                                MessageBox.Show("Time not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                ClearFields();
-                                selectedTimeId = -1;
-                            }
-                        }
-                    }
+                    selectedAddTimeId = result.AddTimeID;
+                    TidateTimePicker.Text = result.AddTimeCode;
+                    TiSlot.Text = result.AddTimeName;
+                }
+                else
+                {
+                    MessageBox.Show("Time not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearFields();
+                    selectedAddTimeId = -1;
                 }
             }
         }

@@ -36,46 +36,24 @@ namespace UnicomTICManagementSystem.Views
 
         private void LoadStudents()
         {
-            using (var conn = Dbconfig.GetConnection())
-            {
-                var cmd = new SQLiteCommand("SELECT StdId, StdName FROM Students", conn);
-                var dt = new DataTable();
-                dt.Load(cmd.ExecuteReader());
-
-                studentComboBox.DisplayMember = "StdName";
-                studentComboBox.ValueMember = "StdId";
-                studentComboBox.DataSource = dt;
-            }
+            var students = controller.GetAllStudents();
+            studentComboBox.DataSource = students;
+            studentComboBox.DisplayMember = "Std_Name";
+            studentComboBox.ValueMember = "Std_ID";
         }
 
         private void LoadCourses()
         {
-            using (var conn = Dbconfig.GetConnection())
-            {
-                var cmd = new SQLiteCommand("SELECT CouId, CouName FROM Courses", conn);
-                var dt = new DataTable();
-                dt.Load(cmd.ExecuteReader());
-
-                courseComboBox.DisplayMember = "CouName";
-                courseComboBox.ValueMember = "CouId";
-                courseComboBox.DataSource = dt;
-            }
+            var courses = controller.GetAllCourses();
+            courseComboBox.DataSource = courses;
+            courseComboBox.DisplayMember = "CourseName";
+            courseComboBox.ValueMember = "CourseID";
         }
 
         private void LoadStudentCourses()
         {
-            using (var conn = Dbconfig.GetConnection())
-            {
-                var cmd = new SQLiteCommand(@"
-                SELECT sc.SCId, s.StdName, c.CouName 
-                FROM StudentCourses sc
-                JOIN Students s ON sc.StudentId = s.StdId
-                JOIN Courses c ON sc.CourseId = c.CouId", conn);
-
-                var dt = new DataTable();
-                dt.Load(cmd.ExecuteReader());
-                studentCourseDataGridView.DataSource = dt;
-            }
+            var studentCourses = controller.GetAllStudentCourseDataTable();
+            studentCourseDataGridView.DataSource = studentCourses;
         }
 
         private void Sadd_Click(object sender, EventArgs e)

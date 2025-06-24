@@ -18,8 +18,8 @@ namespace UnicomTICManagementSystem.Controllers
             using (var conn = Dbconfig.GetConnection())
             using (var cmd = new SQLiteCommand(insertQuery, conn))
             {
-                cmd.Parameters.AddWithValue("@ClName", name);   // Clname.Text (Topic Name)
-                cmd.Parameters.AddWithValue("@ClMode", code);   // Clcode.Text (Study Mode)
+                cmd.Parameters.AddWithValue("@ClName", name);   
+                cmd.Parameters.AddWithValue("@ClMode", code);   
                 cmd.ExecuteNonQuery();
                 MessageBox.Show("Class inserted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -32,8 +32,8 @@ namespace UnicomTICManagementSystem.Controllers
             using (var cmd = new SQLiteCommand(updateQuery, conn))
             {
                 cmd.Parameters.AddWithValue("@ClId", id);
-                cmd.Parameters.AddWithValue("@ClName", name);   // Clname.Text
-                cmd.Parameters.AddWithValue("@ClMode", code);   // Clcode.Text
+                cmd.Parameters.AddWithValue("@ClName", name);   
+                cmd.Parameters.AddWithValue("@ClMode", code);  
                 int rowsAffected = cmd.ExecuteNonQuery();
                 if (rowsAffected > 0)
                     MessageBox.Show("Class updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -73,8 +73,8 @@ namespace UnicomTICManagementSystem.Controllers
                         return new AddClass
                         {
                             AddClassID = Convert.ToInt32(reader["ClId"]),
-                            AddClassCode = reader["ClMode"].ToString(),  // ClMode
-                            AddClassName = reader["ClName"].ToString()   // ClName
+                            AddClassCode = reader["ClMode"].ToString(),  
+                            AddClassName = reader["ClName"].ToString()   
                         };
                     }
                 }
@@ -84,7 +84,7 @@ namespace UnicomTICManagementSystem.Controllers
 
 
 
-        public List<AddClass> GetClassNamesAndModes()   // Added new method to get class names and modes
+        public List<AddClass> GetClassNamesAndModes()   
         {
             var classList = new List<AddClass>();
             using (var conn = Dbconfig.GetConnection())
@@ -95,8 +95,8 @@ namespace UnicomTICManagementSystem.Controllers
                 {
                     classList.Add(new AddClass
                     {
-                        AddClassCode = reader.GetString(0), // ClName
-                        AddClassName = reader.GetString(1)  // ClMode
+                        AddClassCode = reader.GetString(0), 
+                        AddClassName = reader.GetString(1)  
                     });
                 }
             }

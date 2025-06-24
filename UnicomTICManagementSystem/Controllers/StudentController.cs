@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
@@ -132,6 +133,20 @@ namespace UnicomTICManagementSystem.Controllers
                 }
             }
             return null;
+        }
+
+        public DataTable GetAllStudents()
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                string query = "SELECT StdId, StdName FROM Students";
+                using (var cmd = new SQLiteCommand(query, conn))
+                {
+                    var dt = new DataTable();
+                    dt.Load(cmd.ExecuteReader());
+                    return dt;
+                }
+            }
         }
 
     }

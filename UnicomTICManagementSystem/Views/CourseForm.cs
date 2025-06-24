@@ -148,10 +148,10 @@ namespace UnicomTICManagementSystem
         {
             if (CoursedataGridView.SelectedRows.Count > 0)
             {
-                // Get the selected row's Id value (make sure "Id" column exists)
+                
                 int selectedId = Convert.ToInt32(CoursedataGridView.SelectedRows[0].Cells["CouId"].Value);
 
-                // Ask for confirmation
+                
                 DialogResult result = MessageBox.Show(
                     "Are you sure you want to delete this Course?",
                     "Confirm Deletion",
@@ -163,7 +163,7 @@ namespace UnicomTICManagementSystem
                     CourseController controller = new CourseController();
                     controller.DeleteCourse(selectedId);
 
-                    // Refresh the grid
+                    
                     LoadDataIntoGrid();
                     ClearInputFields();
                 }

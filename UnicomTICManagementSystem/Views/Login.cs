@@ -35,7 +35,7 @@ namespace UnicomTICManagementSystem
                 if (user.UserRole == UserRole.Student)
                 {
                     StudentController studentCtrl = new StudentController();
-                    var student = studentCtrl.SearchStudentByUserId(user.UserId); // Add this method
+                    var student = studentCtrl.SearchStudentByUserId(user.UserId); 
 
                     if (student != null)
                     {

@@ -30,7 +30,6 @@
         {
             this.button1 = new System.Windows.Forms.Button();
             this.RodataGridView = new System.Windows.Forms.DataGridView();
-            this.Roname = new System.Windows.Forms.TextBox();
             this.Rocode = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -38,6 +37,7 @@
             this.Sdelete = new System.Windows.Forms.Button();
             this.Sedit = new System.Windows.Forms.Button();
             this.Sadd = new System.Windows.Forms.Button();
+            this.RonamecomboBox = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.RodataGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,13 +59,6 @@
             this.RodataGridView.Size = new System.Drawing.Size(422, 133);
             this.RodataGridView.TabIndex = 56;
             this.RodataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.RodataGridView_CellContentClick);
-            // 
-            // Roname
-            // 
-            this.Roname.Location = new System.Drawing.Point(232, 45);
-            this.Roname.Name = "Roname";
-            this.Roname.Size = new System.Drawing.Size(304, 20);
-            this.Roname.TabIndex = 55;
             // 
             // Rocode
             // 
@@ -132,14 +125,22 @@
             this.Sadd.UseVisualStyleBackColor = true;
             this.Sadd.Click += new System.EventHandler(this.Sadd_Click);
             // 
+            // RonamecomboBox
+            // 
+            this.RonamecomboBox.FormattingEnabled = true;
+            this.RonamecomboBox.Location = new System.Drawing.Point(232, 49);
+            this.RonamecomboBox.Name = "RonamecomboBox";
+            this.RonamecomboBox.Size = new System.Drawing.Size(304, 21);
+            this.RonamecomboBox.TabIndex = 59;
+            // 
             // RoleForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(650, 350);
+            this.Controls.Add(this.RonamecomboBox);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.RodataGridView);
-            this.Controls.Add(this.Roname);
             this.Controls.Add(this.Rocode);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -161,7 +162,6 @@
 
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView RodataGridView;
-        private System.Windows.Forms.TextBox Roname;
         private System.Windows.Forms.TextBox Rocode;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
@@ -169,5 +169,6 @@
         private System.Windows.Forms.Button Sdelete;
         private System.Windows.Forms.Button Sedit;
         private System.Windows.Forms.Button Sadd;
+        private System.Windows.Forms.ComboBox RonamecomboBox;
     }
 }

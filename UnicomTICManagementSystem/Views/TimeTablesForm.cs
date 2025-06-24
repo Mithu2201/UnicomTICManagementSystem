@@ -146,52 +146,41 @@ namespace UnicomTICManagementSystem
         {
             if (string.IsNullOrWhiteSpace(TiDaycomboBox.Text) || string.IsNullOrWhiteSpace(TiSlotcomboBox.Text))
             {
-                MessageBox.Show("Please Select All Values.");
+                MessageBox.Show("Please select all values.");
                 return;
             }
 
-            if (TimecomboBox.SelectedValue == null || CoursecomboBox.SelectedValue == null || SelectcomboBox.SelectedValue == null)
+            if (TimecomboBox.SelectedValue == null || CoursecomboBox.SelectedValue == null ||
+                SelectcomboBox.SelectedValue == null || LecturecomboBox.SelectedValue == null)
             {
-                MessageBox.Show("Please select All Values.");
+                MessageBox.Show("Please select all values.");
                 return;
             }
 
-            using (var conn = Dbconfig.GetConnection())
+            int roomId = Convert.ToInt32(TimecomboBox.SelectedValue);
+            int lecId = Convert.ToInt32(LecturecomboBox.SelectedValue);
+            string timeDay = TiDaycomboBox.Text.Trim();
+            string timeSlot = TiSlotcomboBox.Text.Trim();
+
+            
+            if (TimeControll.IsConflictExists(roomId, lecId, timeDay, timeSlot))
             {
-                string checkQuery = @"
-            SELECT COUNT(*) FROM TimeTables
-            WHERE 
-            (LecID = @LecID AND TimeDay = @TimeDay AND TimeSlot = @TimeSlot)
-            OR
-            (RoomId = @RoomId AND TimeDay = @TimeDay AND TimeSlot = @TimeSlot)";
-
-                using (var cmd = new SQLiteCommand(checkQuery, conn))
-                {
-                    cmd.Parameters.AddWithValue("@LecID", LecturecomboBox.SelectedValue);
-                    cmd.Parameters.AddWithValue("@RoomId", TimecomboBox.SelectedValue);
-                    cmd.Parameters.AddWithValue("@TimeDay", TiDaycomboBox.Text.Trim());
-                    cmd.Parameters.AddWithValue("@TimeSlot", TiSlotcomboBox.Text.Trim());
-
-                    int conflictCount = Convert.ToInt32(cmd.ExecuteScalar());
-
-                    if (conflictCount > 0)
-                    {
-                        MessageBox.Show("Conflict: Either the room or lecturer is already assigned for the same day and time slot.", "Conflict Detected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-                }
+                MessageBox.Show("Conflict: Either the room or lecturer is already assigned for the same day and time slot.", "Conflict Detected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
+            
             var time = new Timetable
             {
-                Tiday = TiDaycomboBox.Text,
-                Tislot = TiSlotcomboBox.Text,
-                RoID = Convert.ToInt32(TimecomboBox.SelectedValue),
+                Tiday = timeDay,
+                Tislot = timeSlot,
+                RoID = roomId,
                 CourseID = Convert.ToInt32(CoursecomboBox.SelectedValue),
                 SubID = Convert.ToInt32(SelectcomboBox.SelectedValue),
-                LecID = Convert.ToInt32(LecturecomboBox.SelectedValue)
+                LecID = lecId
             };
 
+            
             TimeControll.AddTimetable(time);
             LoadTimetables();
             ClearForm();
@@ -253,41 +242,22 @@ namespace UnicomTICManagementSystem
 
             if (!string.IsNullOrEmpty(searchSubject))
             {
-                using (var conn = Dbconfig.GetConnection())
+                var result = TimeControll.SearchTimetableBySubjectName(searchSubject);
+
+                if (result != null)
                 {
-                    string query = @"
-                SELECT t.TimeId, t.TimeDay, t.TimeSlot, t.RoomId, r.RooomName, s.SubjectId, s.SubjectName
-                FROM TimeTables t
-                LEFT JOIN Rooms r ON t.RoomId = r.RoomId
-                LEFT JOIN Subjects s ON t.SubID = s.SubjectId
-                WHERE s.SubjectName LIKE @SubjectName
-                LIMIT 1";
-
-                    using (var cmd = new SQLiteCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@SubjectName", $"%{searchSubject}%");
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                selectedTimeId = Convert.ToInt32(reader["TimeId"]);
-                                TiDaycomboBox.Text = reader["TimeDay"].ToString();
-                                TiSlotcomboBox.Text = reader["TimeSlot"].ToString();
-
-                                int roomId = Convert.ToInt32(reader["RoomId"]);
-                                TimecomboBox.SelectedValue = roomId;
-
-                                int subjectId = Convert.ToInt32(reader["SubjectId"]);
-                                SelectcomboBox.SelectedValue = subjectId;
-                            }
-                            else
-                            {
-                                MessageBox.Show("Timetable for the selected subject not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                ClearForm();
-                            }
-                        }
-                    }
+                    selectedTimeId = result.TiID;
+                    TiDaycomboBox.Text = result.Tiday;
+                    TiSlotcomboBox.Text = result.Tislot;
+                    TimecomboBox.SelectedValue = result.RoID;
+                    CoursecomboBox.SelectedValue = result.CourseID;
+                    SelectcomboBox.SelectedValue = result.SubID;
+                    LecturecomboBox.SelectedValue = result.LecID;
+                }
+                else
+                {
+                    MessageBox.Show("Timetable for the selected subject not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ClearForm();
                 }
             }
             else

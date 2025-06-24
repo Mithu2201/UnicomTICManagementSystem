@@ -94,5 +94,62 @@ namespace UnicomTICManagementSystem.Controllers
                 return dt;
             }
         }
+
+        public List<Student> GetAllStudents()
+        {
+            var students = new List<Student>();
+            using (var conn = Dbconfig.GetConnection())
+            {
+                var cmd = new SQLiteCommand("SELECT StdId, StdName FROM Students", conn);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        students.Add(new Student
+                        {
+                            Std_ID = reader.GetInt32(0),
+                            Std_Name = reader.GetString(1)
+                        });
+                    }
+                }
+            }
+            return students;
+        }
+
+        public List<Course> GetAllCourses()
+        {
+            var courses = new List<Course>();
+            using (var conn = Dbconfig.GetConnection())
+            {
+                var cmd = new SQLiteCommand("SELECT CouId, CouName FROM Courses", conn);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        courses.Add(new Course
+                        {
+                            CourseID = reader.GetInt32(0),
+                            CourseName = reader.GetString(1)
+                        });
+                    }
+                }
+            }
+            return courses;
+        }
+
+        public DataTable GetAllStudentCourseDataTable()
+        {
+            var dt = new DataTable();
+            using (var conn = Dbconfig.GetConnection())
+            {
+                var cmd = new SQLiteCommand(@"
+            SELECT sc.SCId, s.StdName, c.CouName 
+            FROM StudentCourses sc
+            JOIN Students s ON sc.StudentId = s.StdId
+            JOIN Courses c ON sc.CourseId = c.CouId", conn);
+                dt.Load(cmd.ExecuteReader());
+            }
+            return dt;
+        }
     }
 }

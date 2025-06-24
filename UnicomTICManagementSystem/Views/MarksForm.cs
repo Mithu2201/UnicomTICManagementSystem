@@ -64,22 +64,28 @@ namespace UnicomTICManagementSystem
             SelectcomboBox.ValueMember = "SubID";
         }
 
+        private void LoadSubjectsByCourse(int courseId)
+        {
+            var dt = markController.GetSubjectsByCourse(courseId);
+            SelectcomboBox.DataSource = dt;
+            SelectcomboBox.DisplayMember = "SubjectName";
+            SelectcomboBox.ValueMember = "SubjectId";
+        }
+
+        private void LoadStudentsByCourse(int courseId)
+        {
+            var dt = markController.GetStudentsByCourse(courseId);
+            MarkcomboBox.DataSource = dt;
+            MarkcomboBox.DisplayMember = "StdName";
+            MarkcomboBox.ValueMember = "StdId";
+        }
+
         private void LoadStudents()
         {
-            using (var conn = Dbconfig.GetConnection())
-            {
-                string query = "SELECT StdId, StdName FROM Students";
-                using (var cmd = new SQLiteCommand(query, conn))
-                using (var adapter = new SQLiteDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-
-                    MarkcomboBox.DataSource = dt;
-                    MarkcomboBox.DisplayMember = "StdName";
-                    MarkcomboBox.ValueMember = "StdId";
-                }
-            }
+            var dt = markController.GetAllStudents();
+            MarkcomboBox.DataSource = dt;
+            MarkcomboBox.DisplayMember = "StdName";
+            MarkcomboBox.ValueMember = "StdId";
         }
 
         private void LoadData()
@@ -112,11 +118,11 @@ namespace UnicomTICManagementSystem
                     var selected = markController.GetMarkById(selectedMarkId);
                     if (selected != null)
                     {
-                        // Update ComboBoxes instead of TextBoxes
+                        
                         MarkScore.Text = selected.Mamark;
                         Markgrade.Text = selected.Magrade;
 
-                        // Subject selection using SubID
+                        
                         if (selected.StdID != 0)
                         {
                             MarkcomboBox.SelectedValue = selected.StdID;
@@ -217,7 +223,7 @@ namespace UnicomTICManagementSystem
 
         private void Ssearch_Click(object sender, EventArgs e)
         {
-            string subjectName = MarkScore.Text?.Trim(); // or any other input control you want to use for search
+            string subjectName = MarkScore.Text?.Trim(); 
 
             if (!string.IsNullOrEmpty(subjectName))
             {
@@ -269,50 +275,7 @@ namespace UnicomTICManagementSystem
             }
         }
 
-        private void LoadSubjectsByCourse(int courseId)
-        {
-            using (var conn = Dbconfig.GetConnection())
-            {
-                string query = "SELECT SubjectId, SubjectName FROM Subjects WHERE CourseId = @CourseId";
-                using (var cmd = new SQLiteCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@CourseId", courseId);
-                    using (var adapter = new SQLiteDataAdapter(cmd))
-                    {
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-                        SelectcomboBox.DataSource = dt;
-                        SelectcomboBox.DisplayMember = "SubjectName";
-                        SelectcomboBox.ValueMember = "SubjectId";
-                    }
-                }
-            }
-        }
-
-        private void LoadStudentsByCourse(int courseId)
-        {
-            using (var conn = Dbconfig.GetConnection())
-            {
-                string query = @"
-            SELECT s.StdId, s.StdName
-            FROM Students s
-            JOIN StudentCourses sc ON s.StdId = sc.StudentId
-            WHERE sc.CourseId = @CourseId";
-
-                using (var cmd = new SQLiteCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@CourseId", courseId);
-                    using (var adapter = new SQLiteDataAdapter(cmd))
-                    {
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-                        MarkcomboBox.DataSource = dt;
-                        MarkcomboBox.DisplayMember = "StdName";
-                        MarkcomboBox.ValueMember = "StdId";
-                    }
-                }
-            }
-        }
+       
 
 
         private string GetGradeFromScore(int score)

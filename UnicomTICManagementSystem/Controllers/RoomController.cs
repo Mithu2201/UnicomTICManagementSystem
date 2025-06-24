@@ -89,10 +89,12 @@ namespace UnicomTICManagementSystem.Controllers
                     {
                         return new Room
                         {
-                            RoID = reader.GetInt32(0),
-                            Roname = reader.GetString(1),
-                            Rotype = reader.GetString(2),
-                            ExID = reader.GetInt32(3)
+                            RoID = reader.GetInt32(reader.GetOrdinal("RoomId")),
+                            Roname = reader.GetString(reader.GetOrdinal("RooomName")),
+                            Rotype = reader.GetString(reader.GetOrdinal("RoomMode")),
+                            ExID = reader.IsDBNull(reader.GetOrdinal("ExamID")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("ExamID")),
+                            ClID = reader.IsDBNull(reader.GetOrdinal("ClassId")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("ClassId")),
+                            StudyMode = reader.IsDBNull(reader.GetOrdinal("StudyMode")) ? "" : reader.GetString(reader.GetOrdinal("StudyMode"))
                         };
                     }
                 }

@@ -129,10 +129,10 @@ namespace UnicomTICManagementSystem
         {
             if (UserdataGridView.SelectedRows.Count > 0)
             {
-                // Get the selected row's Id value (make sure "Id" column exists)
+                
                 int selectedId = Convert.ToInt32(UserdataGridView.SelectedRows[0].Cells["UserId"].Value);
 
-                // Ask for confirmation
+                
                 DialogResult result = MessageBox.Show(
                     "Are you sure you want to delete this user?",
                     "Confirm Deletion",
@@ -144,7 +144,7 @@ namespace UnicomTICManagementSystem
                     UserController controller = new UserController();
                     controller.DeleteUser(selectedId);
 
-                    // Refresh the grid
+                    
                     LoadDataIntoGrid();
                     ClearInputFields();
                 }

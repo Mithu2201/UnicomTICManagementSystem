@@ -120,7 +120,7 @@ namespace UnicomTICManagementSystem
                     Lecname.Text = lecture.Lec_Name;
                     LecPhone.Text = lecture.Lec_Phone;
                     LecAddress.Text = lecture.Lec_Address;
-                    // Store User_ID somewhere if needed for other operations
+                    
                 }
                 else
                 {
@@ -140,10 +140,10 @@ namespace UnicomTICManagementSystem
         {
             if (LecdataGridView.SelectedRows.Count > 0)
             {
-                // Get the selected row's Id value (make sure "Id" column exists)
+                
                 int selectedId = Convert.ToInt32(LecdataGridView.SelectedRows[0].Cells["LecId"].Value);
 
-                // Ask for confirmation
+                
                 DialogResult result = MessageBox.Show(
                     "Are you sure you want to delete this lecture?",
                     "Confirm Deletion",
@@ -155,7 +155,7 @@ namespace UnicomTICManagementSystem
                     LectureControllers controller = new LectureControllers();
                     controller.DeleteLecture(selectedId);
 
-                    // Refresh the grid
+                    
                     LoadDataIntoGrid();
                     ClearInputFields();
                 }

@@ -83,7 +83,7 @@ namespace UnicomTICManagementSystem
                 string updatedPhone = StddPhone.Text;
                 string updatedAddress = StddAddress.Text;
 
-                // Get userId from the currently selected row (or from a hidden field)
+                
                 int userId = -1;
                 if (StdddataGridView.CurrentRow != null)
                 {
@@ -106,10 +106,10 @@ namespace UnicomTICManagementSystem
         {
             if (StdddataGridView.SelectedRows.Count > 0)
             {
-                // Get the selected row's Id value (make sure "Id" column exists)
+                
                 int selectedId = Convert.ToInt32(StdddataGridView.SelectedRows[0].Cells["StdId"].Value);
 
-                // Ask for confirmation
+                
                 DialogResult result = MessageBox.Show(
                     "Are you sure you want to delete this student?",
                     "Confirm Deletion",
@@ -121,7 +121,7 @@ namespace UnicomTICManagementSystem
                     StudentController controller = new StudentController();
                     controller.DeleteStudent(selectedId);
 
-                    // Refresh the grid
+                    
                     LoadDataIntoGrid();
                     ClearInputFields();
                 }
@@ -147,7 +147,7 @@ namespace UnicomTICManagementSystem
                     Stddname.Text = student.Std_Name;
                     StddPhone.Text = student.Std_Phone;
                     StddAddress.Text = student.Std_Address;
-                    // Optionally, keep track of UserId if you need it elsewhere
+                    
                 }
                 else
                 {

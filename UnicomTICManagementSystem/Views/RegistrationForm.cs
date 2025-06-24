@@ -50,7 +50,7 @@ namespace UnicomTICManagementSystem
         {
             if (!ValidateRoleNumber())
             {
-                return; // Stop the registration if validation fails
+                return; 
             }
 
             if (StdPhone.Text.Length != 10 || !StdPhone.Text.All(char.IsDigit))
@@ -59,7 +59,7 @@ namespace UnicomTICManagementSystem
                 return;
             }
 
-            // First, insert the user and get userId
+            
             User user = new User
             {
                 UserName = StdUserName.Text,
@@ -72,10 +72,10 @@ namespace UnicomTICManagementSystem
 
             if (userId == -1)
             {
-                return; // Prevent further execution
+                return; 
             }
 
-            // Now check the role and insert accordingly
+           
             if (RegcomboBox.Text == "Student")
             {
                 Student student = new Student

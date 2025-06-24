@@ -29,7 +29,7 @@ namespace UnicomTICManagementSystem
         {
             if (userRole == "Student")
             {
-                // Hide search controls
+                
                 StdMarkSearch.Enabled = false;
                 StdMarkSearch.Visible = false;
                 button1.Visible = false;

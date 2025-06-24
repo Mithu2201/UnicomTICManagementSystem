@@ -27,7 +27,7 @@ namespace UnicomTICManagementSystem
             InitializeComponent();
             roomController = new RoomController();
             classController = new ClassControllers();
-            examController = new ExamController(); // Ensure you have this controller
+            examController = new ExamController(); 
             RoomdataGridView.SelectionChanged += RoomdataGridView_SelectionChanged;
 
             this.Load += RoomForm_Load;
@@ -53,15 +53,15 @@ namespace UnicomTICManagementSystem
             {
                 var classList = classController.GetAllClasses();
                 RoomcomboBox.DataSource = classList;
-                RoomcomboBox.DisplayMember = "Clname";   // Match Class.Clname
-                RoomcomboBox.ValueMember = "ClID";       // Match Class.ClID
+                RoomcomboBox.DisplayMember = "Clname";   
+                RoomcomboBox.ValueMember = "ClID";       
             }
             else if (selectedMode == "Exam")
             {
                 var examList = examController.GetAllExams();
                 RoomcomboBox.DataSource = examList;
-                RoomcomboBox.DisplayMember = "Exname";   // Match Exam.Exname
-                RoomcomboBox.ValueMember = "ExID";       // Match Exam.ExID
+                RoomcomboBox.DisplayMember = "Exname";   
+                RoomcomboBox.ValueMember = "ExID";       
             }
         }
 
@@ -200,7 +200,7 @@ namespace UnicomTICManagementSystem
                     RoRoomcomboBox.Text = room.Roname;
                     RoTypecomboBox.Text = room.Rotype;
 
-                    // Select RoomcomboBox based on StudyMode
+                    
                     if (room.ClID.HasValue)
                     {
                         StucomboBox.SelectedItem = "Class";

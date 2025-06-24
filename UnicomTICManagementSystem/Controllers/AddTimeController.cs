@@ -59,30 +59,32 @@ namespace UnicomTICManagementSystem.Controllers
             }
         }
 
-        public AddTime SearchAddTimeByDay(string day)
+        public AddTime SearchAddTimeByCode(string code)
         {
-            string query = "SELECT * FROM AddTimes WHERE TiDay = @TiDay LIMIT 1";
             using (var conn = Dbconfig.GetConnection())
-            using (var cmd = new SQLiteCommand(query, conn))
             {
-                cmd.Parameters.AddWithValue("@TiDay", day);
-                using (var reader = cmd.ExecuteReader())
+                string query = "SELECT * FROM AddTimes WHERE AddTimeCode = @AddTimeCode";
+                using (var cmd = new SQLiteCommand(query, conn))
                 {
-                    if (reader.Read())
+                    cmd.Parameters.AddWithValue("@AddTimeCode", code);
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        return new AddTime
+                        if (reader.Read())
                         {
-                            AddTimeID = Convert.ToInt32(reader["TiId"]),
-                            AddTimeCode = reader["TiDay"].ToString(),
-                            AddTimeName = reader["TiSlot"].ToString()
-                        };
+                            return new AddTime
+                            {
+                                AddTimeID = Convert.ToInt32(reader["AddTimeID"]),
+                                AddTimeCode = reader["AddTimeCode"].ToString(),
+                                AddTimeName = reader["AddTimeName"].ToString()
+                            };
+                        }
+                        return null;
                     }
                 }
             }
-            return null;
         }
 
-        
+
 
         public List<AddTime> GetTimeDaysAndSlots()
         {
@@ -95,8 +97,8 @@ namespace UnicomTICManagementSystem.Controllers
                 {
                     timeList.Add(new AddTime
                     {
-                        AddTimeCode = reader.GetString(0), // TiDay
-                        AddTimeName = reader.GetString(1)  // TiSlot
+                        AddTimeCode = reader.GetString(0), 
+                        AddTimeName = reader.GetString(1)  
                     });
                 }
             }

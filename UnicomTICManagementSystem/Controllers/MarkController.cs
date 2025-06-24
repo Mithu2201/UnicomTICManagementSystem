@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
@@ -202,6 +203,47 @@ namespace UnicomTICManagementSystem.Controllers
             }
 
             return null;
+        }
+
+        public DataTable GetSubjectsByCourse(int courseId)
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                var cmd = new SQLiteCommand("SELECT SubjectId, SubjectName FROM Subjects WHERE CourseId = @CourseId", conn);
+                cmd.Parameters.AddWithValue("@CourseId", courseId);
+
+                var dt = new DataTable();
+                dt.Load(cmd.ExecuteReader());
+                return dt;
+            }
+        }
+
+        public DataTable GetStudentsByCourse(int courseId)
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                var cmd = new SQLiteCommand(@"
+                    SELECT s.StdId, s.StdName
+                    FROM Students s
+                    JOIN StudentCourses sc ON s.StdId = sc.StudentId
+                    WHERE sc.CourseId = @CourseId", conn);
+                cmd.Parameters.AddWithValue("@CourseId", courseId);
+
+                var dt = new DataTable();
+                dt.Load(cmd.ExecuteReader());
+                return dt;
+            }
+        }
+
+        public DataTable GetAllStudents()
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                var cmd = new SQLiteCommand("SELECT StdId, StdName FROM Students", conn);
+                var dt = new DataTable();
+                dt.Load(cmd.ExecuteReader());
+                return dt;
+            }
         }
 
     }

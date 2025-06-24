@@ -27,12 +27,27 @@ namespace UnicomTICManagementSystem
         private void RoleForm_Load(object sender, EventArgs e)
         {
             LoadDataIntoGrid();
+            LoadPredefinedRoleNames();  
+            
+        }
+
+        private void LoadPredefinedRoleNames()
+        {
+            List<string> predefinedRoles = new List<string>
+        {
+        "Admin",
+        "Student",
+        "Staff",
+        "Lecture"
+        };
+
+            RonamecomboBox.DataSource = predefinedRoles;
         }
 
         private void ClearInputFields()
         {
             Rocode.Clear();
-            Roname.Clear();
+            RonamecomboBox.SelectedIndex = -1;
         }
 
         private void RodataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -42,7 +57,7 @@ namespace UnicomTICManagementSystem
                 DataGridViewRow selectedRow = RodataGridView.Rows[e.RowIndex];
                 selectedRoleId = Convert.ToInt32(selectedRow.Cells["RoleId"].Value);
                 Rocode.Text = selectedRow.Cells["RoleCode"].Value.ToString();
-                Roname.Text = selectedRow.Cells["RoleName"].Value.ToString();
+                RonamecomboBox.Text = selectedRow.Cells["RoleName"].Value.ToString();
             }
         }
 
@@ -75,7 +90,7 @@ namespace UnicomTICManagementSystem
                 {
                     selectedRoleId = role.RoleID;
                     Rocode.Text = role.RoleCode;
-                    Roname.Text = role.RoleName;
+                    RonamecomboBox.Text = role.RoleName;
                 }
                 else
                 {
@@ -92,7 +107,7 @@ namespace UnicomTICManagementSystem
 
         private void Sadd_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(Rocode.Text) || string.IsNullOrEmpty(Roname.Text))
+            if (string.IsNullOrEmpty(Rocode.Text) || string.IsNullOrEmpty(RonamecomboBox.Text))
             {
                 MessageBox.Show("Both Role Code and Role Name are required.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -118,7 +133,7 @@ namespace UnicomTICManagementSystem
             Role role = new Role
             {
                 RoleCode = Rocode.Text.Trim(),
-                RoleName = Roname.Text.Trim()
+                RoleName = RonamecomboBox.Text.Trim()
             };
 
             RoleController controller = new RoleController();
@@ -133,7 +148,7 @@ namespace UnicomTICManagementSystem
             if (selectedRoleId != -1)
             {
                 RoleController controller = new RoleController();
-                controller.UpdateRole(selectedRoleId, Rocode.Text, Roname.Text);
+                controller.UpdateRole(selectedRoleId, Rocode.Text, RonamecomboBox.Text);
 
                 LoadDataIntoGrid();
                 ClearInputFields();

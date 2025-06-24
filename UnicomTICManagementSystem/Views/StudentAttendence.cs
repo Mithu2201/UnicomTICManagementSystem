@@ -34,7 +34,7 @@ namespace UnicomTICManagementSystem
         {
             if (userRole == "Student")
             {
-                // Hide and disable search controls for student
+                
                 StdAtSearch.Enabled = false;
                 StdAtSearch.Visible = false;
                 StdTiSearchBtn.Visible = false;

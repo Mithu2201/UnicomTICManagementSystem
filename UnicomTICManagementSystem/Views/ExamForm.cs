@@ -183,11 +183,11 @@ namespace UnicomTICManagementSystem
                     var selected = examController.GetExamById(selectedExamId);
                     if (selected != null)
                     {
-                        // Update ComboBoxes instead of TextBoxes
+                        
                         ExcomboBox.Text = selected.Exname;
                         TypecomboBox.Text = selected.Exmode;
 
-                        // Subject selection using SubID
+                        
                         if (selected.SubID != 0)
                         {
                             ExamcomboBox.SelectedValue = selected.SubID;

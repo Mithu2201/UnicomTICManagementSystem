@@ -83,7 +83,7 @@ namespace UnicomTICManagementSystem
                 string updatedPhone = StaPhone.Text;
                 string updatedAddress = StaAddress.Text;
 
-                // Get userId from the currently selected row (or from a hidden field)
+                
                 int userId = -1;
                 if (StadataGridView.CurrentRow != null)
                 {
@@ -106,10 +106,10 @@ namespace UnicomTICManagementSystem
         {
             if (StadataGridView.SelectedRows.Count > 0)
             {
-                // Get the selected row's Id value (make sure "Id" column exists)
+                
                 int selectedId = Convert.ToInt32(StadataGridView.SelectedRows[0].Cells["StaffId"].Value);
 
-                // Ask for confirmation
+                
                 DialogResult result = MessageBox.Show(
                     "Are you sure you want to delete this staff?",
                     "Confirm Deletion",
@@ -121,7 +121,7 @@ namespace UnicomTICManagementSystem
                     StaffControllers controller = new StaffControllers();
                     controller.DeleteStaff(selectedId);
 
-                    // Refresh the grid
+                    
                     LoadDataIntoGrid();
                     ClearInputFields();
                 }
@@ -147,7 +147,7 @@ namespace UnicomTICManagementSystem
                     Staname.Text = staff.Stf_Name;
                     StaPhone.Text = staff.Stf_Phone;
                     StaAddress.Text = staff.Stf_Address;
-                    // If you want to keep UserId for other operations, save it as needed
+                    
                 }
                 else
                 {

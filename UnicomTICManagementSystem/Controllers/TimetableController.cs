@@ -29,6 +29,8 @@ namespace UnicomTICManagementSystem.Controllers
             }
         }
 
+
+
         public void UpdateTimetable(Timetable time)
         {
             using (var conn = Dbconfig.GetConnection())
@@ -131,5 +133,68 @@ namespace UnicomTICManagementSystem.Controllers
             }
             return list;
         }
+
+        public Timetable SearchTimetableBySubjectName(string subjectName)
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                string query = @"
+            SELECT t.TimeId, t.TimeDay, t.TimeSlot, t.RoomId, t.CourseId, t.SubID, t.LecID
+            FROM TimeTables t
+            LEFT JOIN Subjects s ON t.SubID = s.SubjectId
+            WHERE s.SubjectName LIKE @SubjectName
+            LIMIT 1";
+
+                using (var cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@SubjectName", $"%{subjectName}%");
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new Timetable
+                            {
+                                TiID = Convert.ToInt32(reader["TimeId"]),
+                                Tiday = reader["TimeDay"].ToString(),
+                                Tislot = reader["TimeSlot"].ToString(),
+                                RoID = Convert.ToInt32(reader["RoomId"]),
+                                CourseID = Convert.ToInt32(reader["CourseId"]),
+                                SubID = Convert.ToInt32(reader["SubID"]),
+                                LecID = Convert.ToInt32(reader["LecID"])
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+        public bool IsConflictExists(int roomId, int lecId, string timeDay, string timeSlot)
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                string checkQuery = @"
+            SELECT COUNT(*) FROM TimeTables
+            WHERE 
+            (LecID = @LecID AND TimeDay = @TimeDay AND TimeSlot = @TimeSlot)
+            OR
+            (RoomId = @RoomId AND TimeDay = @TimeDay AND TimeSlot = @TimeSlot)";
+
+                using (var cmd = new SQLiteCommand(checkQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@LecID", lecId);
+                    cmd.Parameters.AddWithValue("@RoomId", roomId);
+                    cmd.Parameters.AddWithValue("@TimeDay", timeDay);
+                    cmd.Parameters.AddWithValue("@TimeSlot", timeSlot);
+
+                    int count = Convert.ToInt32(cmd.ExecuteScalar());
+                    return count > 0;
+                }
+            }
+        }
+
+        
     }
+
+
 }

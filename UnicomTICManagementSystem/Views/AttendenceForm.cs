@@ -48,7 +48,7 @@ namespace UnicomTICManagementSystem
         {
             if (loggedInStudentId.HasValue)
             {
-                // Only load attendance for logged-in student
+                
                 AttenddataGridView.DataSource = attendControll
                     .GetAllStatusAll()
                     .Where(a => a.StudentID == loggedInStudentId.Value)
@@ -75,20 +75,10 @@ namespace UnicomTICManagementSystem
 
         private void LoadStudents()
         {
-            using (var conn = Dbconfig.GetConnection())
-            {
-                string query = "SELECT StdId, StdName FROM Students";
-                using (var cmd = new SQLiteCommand(query, conn))
-                using (var adapter = new SQLiteDataAdapter(cmd))
-                {
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-
-                    AttStucomboBox.DataSource = dt;
-                    AttStucomboBox.DisplayMember = "StdName";
-                    AttStucomboBox.ValueMember = "StdId";
-                }
-            }
+            var dt = StudentControll.GetAllStudents();
+            AttStucomboBox.DataSource = dt;
+            AttStucomboBox.DisplayMember = "StdName";
+            AttStucomboBox.ValueMember = "StdId";
         }
 
         private void LoadSubjects()

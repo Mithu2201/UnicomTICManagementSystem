@@ -89,7 +89,7 @@ namespace UnicomTICManagementSystem
 
             foreach (var subject in subjectList)
             {
-                StdTicomboBox.Items.Add(subject.Item2); // Show subject name
+                StdTicomboBox.Items.Add(subject.Item2); 
             }
 
             StdTicomboBox.Tag = subjectList;

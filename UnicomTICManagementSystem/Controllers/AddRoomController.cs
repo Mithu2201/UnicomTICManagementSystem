@@ -101,8 +101,8 @@ namespace UnicomTICManagementSystem.Controllers
                 {
                     roomList.Add(new AddRooms
                     {
-                        AddRoomCode = reader.GetString(0), // RoName
-                        AddRoomName = reader.GetString(1)  // RoType
+                        AddRoomCode = reader.GetString(0), 
+                        AddRoomName = reader.GetString(1)  
                     });
                 }
             }

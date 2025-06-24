@@ -176,7 +176,7 @@ namespace UnicomTICManagementSystem.Controllers
             {
                 string formattedDate = DateTime.Now.ToString("dddd, MMMM dd, yyyy");
 
-                // Avoid duplicate for the day
+                
                 string checkQuery = @"SELECT COUNT(*) FROM Attendances 
                               WHERE StdId = @StdId AND Date = @Date";
                 var checkCmd = new SQLiteCommand(checkQuery, conn);
@@ -185,9 +185,9 @@ namespace UnicomTICManagementSystem.Controllers
 
                 long exists = (long)checkCmd.ExecuteScalar();
                 if (exists > 0)
-                    return; // Already marked
+                    return; 
 
-                // ✅ Get subject assigned to the student (via course mapping)
+                
                 int subjectId = GetAssignedSubjectIdForStudent(studentId, conn);
                 int statusId = GetStatusIdByName("Present", conn);
 
@@ -212,12 +212,7 @@ namespace UnicomTICManagementSystem.Controllers
             return result != null ? Convert.ToInt32(result) : -1;
         }
 
-        private int GetDefaultSubjectId(int studentId, SQLiteConnection conn)
-        {
-            var cmd = new SQLiteCommand("SELECT SubjectId FROM Subjects LIMIT 1", conn);
-            var result = cmd.ExecuteScalar();
-            return result != null ? Convert.ToInt32(result) : -1;
-        }
+        
 
         private int GetAssignedSubjectIdForStudent(int studentId, SQLiteConnection conn)
         {
