@@ -112,6 +112,12 @@ namespace UnicomTICManagementSystem
                 return;
             }
 
+            if (SubControll.IsSubjectCodeExists(SubCode.Text.Trim()))
+            {
+                MessageBox.Show("Subject Code already exists. Please enter a unique code.");
+                return;
+            }
+
             var Subject01 = new Subject
             {
                 

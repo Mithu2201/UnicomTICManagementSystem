@@ -106,7 +106,29 @@ namespace UnicomTICManagementSystem
                     {
                         RoRoomcomboBox.Text = fullRoom.Roname;
                         RoTypecomboBox.Text = fullRoom.Rotype;
-                        RoomcomboBox.SelectedValue = fullRoom.ExID;
+
+                        if (fullRoom.ClID.HasValue)
+                        {
+                            StucomboBox.SelectedItem = "Class";
+
+                            this.BeginInvoke((Action)(() =>
+                            {
+                                RoomcomboBox.SelectedValue = fullRoom.ClID.Value;
+                            }));
+                        }
+                        else if (fullRoom.ExID.HasValue)
+                        {
+                            StucomboBox.SelectedItem = "Exam";
+
+                            this.BeginInvoke((Action)(() =>
+                            {
+                                RoomcomboBox.SelectedValue = fullRoom.ExID.Value;
+                            }));
+                        }
+                        else
+                        {
+                            RoomcomboBox.SelectedIndex = -1;
+                        }
                     }
                 }
             }
@@ -200,16 +222,26 @@ namespace UnicomTICManagementSystem
                     RoRoomcomboBox.Text = room.Roname;
                     RoTypecomboBox.Text = room.Rotype;
 
-                    
                     if (room.ClID.HasValue)
                     {
-                        StucomboBox.SelectedItem = "Class";
-                        RoomcomboBox.SelectedValue = room.ClID.Value;
+                        StucomboBox.SelectedItem = "Class"; 
+
+                        
+                        this.BeginInvoke((Action)(() =>
+                        {
+                            if (room.ClID.HasValue)
+                                RoomcomboBox.SelectedValue = room.ClID.Value;
+                        }));
                     }
                     else if (room.ExID.HasValue)
                     {
                         StucomboBox.SelectedItem = "Exam";
-                        RoomcomboBox.SelectedValue = room.ExID.Value;
+
+                        this.BeginInvoke((Action)(() =>
+                        {
+                            if (room.ExID.HasValue)
+                                RoomcomboBox.SelectedValue = room.ExID.Value;
+                        }));
                     }
                     else
                     {
@@ -226,7 +258,7 @@ namespace UnicomTICManagementSystem
             {
                 MessageBox.Show("Enter room name to search.");
             }
-            
+
         }
 
 

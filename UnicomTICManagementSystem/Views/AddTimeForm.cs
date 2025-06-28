@@ -120,22 +120,24 @@ namespace UnicomTICManagementSystem
 
         private void Ssearch_Click_1(object sender, EventArgs e)
         {
-            string code = TidateTimePicker.Text.Trim(); 
-            if (!string.IsNullOrEmpty(code))
+            string selectedDay = TidateTimePicker.Text.Trim();  
+
+            if (!string.IsNullOrEmpty(selectedDay))
             {
-                var result = controller.SearchAddTimeByCode(code);
-                if (result != null)
+                var results = controller.SearchAddTimeByDay(selectedDay);
+                if (results != null && results.Count > 0)
                 {
-                    selectedAddTimeId = result.AddTimeID;
-                    TidateTimePicker.Text = result.AddTimeCode;
-                    TiSlot.Text = result.AddTimeName;
+                    TidataGridView.DataSource = results;
                 }
                 else
                 {
-                    MessageBox.Show("Time not found.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ClearFields();
-                    selectedAddTimeId = -1;
+                    MessageBox.Show("No time slots found for this date.", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadData(); 
                 }
+            }
+            else
+            {
+                MessageBox.Show("Please select a date.", "Input Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
     }

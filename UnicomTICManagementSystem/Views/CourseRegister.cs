@@ -142,11 +142,11 @@ namespace UnicomTICManagementSystem.Views
                 studentComboBox.SelectedValue = studentId;
 
                 string courseName = filteredCourses.Rows[0]["CouName"].ToString();
-                foreach (DataRowView course in courseComboBox.Items)
+                foreach (Course course in courseComboBox.Items)
                 {
-                    if (course["CouName"].ToString() == courseName)
+                    if (course.CourseName == courseName)
                     {
-                        courseComboBox.SelectedValue = course["CouId"];
+                        courseComboBox.SelectedValue = course.CourseID;
                         break;
                     }
                 }

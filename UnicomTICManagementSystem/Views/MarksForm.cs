@@ -155,12 +155,22 @@ namespace UnicomTICManagementSystem
         private void Sadd_Click(object sender, EventArgs e)
         {
             if (MarkcomboBox.SelectedValue == null ||
-        string.IsNullOrWhiteSpace(MarkScore.Text) ||
-        string.IsNullOrWhiteSpace(Markgrade.Text))
-    {
-        MessageBox.Show("All fields are required.");
-        return;
-    }
+            string.IsNullOrWhiteSpace(MarkScore.Text) ||
+            string.IsNullOrWhiteSpace(Markgrade.Text))
+            {
+                MessageBox.Show("All fields are required.");
+                return;
+            }
+
+            int studentId = Convert.ToInt32(MarkcomboBox.SelectedValue);
+            int subjectId = Convert.ToInt32(SelectcomboBox.SelectedValue);
+
+                
+            if (markController.IsDuplicateMark(studentId, subjectId))
+            {
+                MessageBox.Show("Mark for this student and subject already exists.");
+                return;
+            }
 
             var mark = new Mark
             {
@@ -223,29 +233,26 @@ namespace UnicomTICManagementSystem
 
         private void Ssearch_Click(object sender, EventArgs e)
         {
-            string subjectName = MarkScore.Text?.Trim(); 
+            if (SelectcomboBox.SelectedValue == null)
+            {
+                MessageBox.Show("Please select a subject to search.");
+                return;
+            }
+
+            string subjectName = SelectcomboBox.Text?.Trim();
 
             if (!string.IsNullOrEmpty(subjectName))
             {
-                var mark = markController.SearchMarkBySubjectName(subjectName);
-                if (mark != null)
+                var marks = markController.SearchMarksBySubjectName(subjectName);
+                if (marks != null && marks.Count > 0)
                 {
-                    selectedMarkId = mark.MaID;
-                    MarkScore.Text = mark.Mamark;
-                    Markgrade.Text = mark.Magrade;
-                    MarkcomboBox.SelectedValue = mark.StdID;
-                    CoursecomboBox.SelectedValue = mark.CourseId;
-                    SelectcomboBox.SelectedValue = mark.SubjectId;
+                    MarkdataGridView.DataSource = marks;
                 }
                 else
                 {
-                    MessageBox.Show("No marks found for that subject.");
+                    MessageBox.Show("No marks found for the selected subject.");
                     ClearForm();
                 }
-            }
-            else
-            {
-                MessageBox.Show("Enter a subject name to search.");
             }
         }
 

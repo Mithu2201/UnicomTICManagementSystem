@@ -116,8 +116,8 @@ namespace UnicomTICManagementSystem
 
             if (StdTidataGridView.Columns.Count >= 3)
             {
-                StdTidataGridView.Columns["TimeDay"].HeaderText = "Start Session";
-                StdTidataGridView.Columns["TimeSlot"].HeaderText = "End Session";
+                StdTidataGridView.Columns["TimeDay"].HeaderText = "Date_Time";
+                StdTidataGridView.Columns["TimeSlot"].HeaderText = "Time_Period";
                 StdTidataGridView.Columns["RoomName"].HeaderText = "Room";
             }
         }

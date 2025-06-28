@@ -117,8 +117,9 @@ namespace UnicomTICManagementSystem.Controllers
             }
         }
 
-        public Mark SearchMarkBySubjectName(string subjectName)
+        public List<Mark> SearchMarksBySubjectName(string subjectName)
         {
+            var result = new List<Mark>();
             using (var conn = Dbconfig.GetConnection())
             {
                 string query = @"
@@ -130,8 +131,7 @@ namespace UnicomTICManagementSystem.Controllers
             JOIN Students s ON m.StdId = s.StdId
             JOIN Courses c ON m.CourseId = c.CouId
             JOIN Subjects sub ON m.SubjectId = sub.SubjectId
-            WHERE sub.SubjectName LIKE @subjectName
-            LIMIT 1";
+            WHERE sub.SubjectName LIKE @subjectName";
 
                 using (var cmd = new SQLiteCommand(query, conn))
                 {
@@ -139,9 +139,9 @@ namespace UnicomTICManagementSystem.Controllers
 
                     using (var reader = cmd.ExecuteReader())
                     {
-                        if (reader.Read())
+                        while (reader.Read())
                         {
-                            return new Mark
+                            result.Add(new Mark
                             {
                                 MaID = Convert.ToInt32(reader["MarksId"]),
                                 Mamark = reader["MarkScore"].ToString(),
@@ -152,13 +152,13 @@ namespace UnicomTICManagementSystem.Controllers
                                 CourseName = reader["CouName"].ToString(),
                                 SubjectId = Convert.ToInt32(reader["SubjectId"]),
                                 SubjectName = reader["SubjectName"].ToString()
-                            };
+                            });
                         }
                     }
                 }
             }
 
-            return null;
+            return result;
         }
 
 
@@ -243,6 +243,26 @@ namespace UnicomTICManagementSystem.Controllers
                 var dt = new DataTable();
                 dt.Load(cmd.ExecuteReader());
                 return dt;
+            }
+        }
+
+        public bool IsDuplicateMark(int studentId, int subjectId)
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                string query = @"
+            SELECT COUNT(*) 
+            FROM Marks 
+            WHERE StdId = @StdId AND SubjectId = @SubjectId";
+
+                using (var cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@StdId", studentId);
+                    cmd.Parameters.AddWithValue("@SubjectId", subjectId);
+
+                    int count = Convert.ToInt32(cmd.ExecuteScalar());
+                    return count > 0;
+                }
             }
         }
 

@@ -112,7 +112,7 @@ namespace UnicomTICManagementSystem
             {
                 if (!int.TryParse(StdMarkSearch.Text.Trim(), out int studentId))
                 {
-                    MessageBox.Show("Welcome.");
+                    
                     return;
                 }
 

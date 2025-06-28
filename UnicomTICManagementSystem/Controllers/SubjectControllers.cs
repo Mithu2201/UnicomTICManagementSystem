@@ -136,5 +136,17 @@ namespace UnicomTICManagementSystem.Controllers
             return Subjects;
         }
 
+        public bool IsSubjectCodeExists(string subjectCode)
+        {
+            using (var conn = Dbconfig.GetConnection())
+            {
+                var cmd = new SQLiteCommand("SELECT COUNT(*) FROM Subjects WHERE SubjectCode = @code", conn);
+                cmd.Parameters.AddWithValue("@code", subjectCode);
+
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                return count > 0;
+            }
+        }
+
     }
 }
